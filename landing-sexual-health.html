@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  /* ---------- Design tokens ---------- */
+  :root {
+    --bg: #1B2415;
+    --bg-panel: #232E1B;
+    --bg-panel-2: #29341F;
+    --ink: #F1ECDF;
+    --ink-soft: #D9D2BE;
+    --muted: #B7C0A6;
+    --gold: #D4AF37;
+    --gold-strong: #E9C766;
+    --rose: #C97A96;
+    --line: rgba(212, 175, 55, 0.28);
+    --shadow: rgba(0, 0, 0, 0.45);
+    --focus: #E9C766;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme]) {
+      --bg: #F6F1E3;
+      --bg-panel: #FFFFFF;
+      --bg-panel-2: #FBF7EA;
+      --ink: #22301A;
+      --ink-soft: #37432B;
+      --muted: #5B6B4C;
+      --gold: #8A6A14;
+      --gold-strong: #6E5410;
+      --rose: #8A3A57;
+      --line: rgba(90, 70, 15, 0.22);
+      --shadow: rgba(60, 50, 20, 0.12);
+      --focus: #6E5410;
+    }
+  }
+  html[data-theme="light"] {
+    --bg: #F6F1E3; --bg-panel: #FFFFFF; --bg-panel-2: #FBF7EA;
+    --ink: #22301A; --ink-soft: #37432B; --muted: #5B6B4C;
+    --gold: #8A6A14; --gold-strong: #6E5410; --rose: #8A3A57;
+    --line: rgba(90, 70, 15, 0.22); --shadow: rgba(60, 50, 20, 0.12); --focus: #6E5410;
+  }
+  html[data-theme="dark"] {
+    --bg: #1B2415; --bg-panel: #232E1B; --bg-panel-2: #29341F;
+    --ink: #F1ECDF; --ink-soft: #D9D2BE; --muted: #B7C0A6;
+    --gold: #D4AF37; --gold-strong: #E9C766; --rose: #C97A96;
+    --line: rgba(212, 175, 55, 0.28); --shadow: rgba(0, 0, 0, 0.45); --focus: #E9C766;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color .35s ease, color .35s ease;
+    margin: 0;
+  }
+  h1, h2, h3, .font-display {
+    font-family: 'Cormorant Garamond', Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: 0.01em;
+  }
+  .eyebrow {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--rose);
+    font-weight: 600;
+  }
+  ::selection { background: var(--rose); color: var(--bg); }
+  a, button { font-family: inherit; }
+  :focus-visible { outline: 2.5px solid var(--focus); outline-offset: 3px; border-radius: 3px; }
+  .skip-link {
+    position: absolute; left: -9999px; top: 0; z-index: 100;
+    background: var(--gold); color: var(--bg); padding: 10px 16px; border-radius: 0 0 6px 0; font-weight: 600;
+  }
+  .skip-link:focus { left: 0; }
+  .divider { height: 1px; background: var(--line); border: 0; }
+
+  .btn-buy {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    background: var(--gold); color: var(--bg); font-weight: 700; letter-spacing: 0.01em;
+    padding: 0.95rem 1.9rem; border-radius: 999px; border: none; cursor: pointer;
+    box-shadow: 0 10px 30px -12px var(--shadow);
+    transition: transform .18s ease, box-shadow .18s ease, background-color .2s ease;
+    text-decoration: none; font-size: 1rem;
+  }
+  .btn-buy:hover { transform: translateY(-2px); background: var(--gold-strong); }
+  .btn-buy:active { transform: translateY(0); }
+  .btn-ghost {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    background: transparent; color: var(--ink); border: 1px solid var(--line);
+    padding: 0.9rem 1.6rem; border-radius: 999px; font-weight: 600; cursor: pointer;
+    transition: border-color .2s ease, background-color .2s ease;
+  }
+  .btn-ghost:hover { border-color: var(--rose); background: color-mix(in srgb, var(--rose) 10%, transparent); }
+
+  .theme-toggle {
+    width: 42px; height: 42px; border-radius: 999px; border: 1px solid var(--line);
+    background: var(--bg-panel); color: var(--ink);
+    display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .theme-toggle svg { width: 18px; height: 18px; }
+  html[data-theme="light"] .icon-moon,
+  html:not([data-theme="dark"]):not([data-theme="light"]) .icon-moon { display: none; }
+  html[data-theme="dark"] .icon-sun,
+  html:not([data-theme="dark"]):not([data-theme="light"]) .icon-sun { display: none; }
+  @media (prefers-color-scheme: light) {
+    html:not([data-theme]) .icon-moon { display: none; }
+    html:not([data-theme]) .icon-sun { display: inline; }
+  }
+
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in-view { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+  .drift { animation: drift 14s ease-in-out infinite; }
+  .drift-slow { animation: drift 20s ease-in-out infinite; }
+  .drift-rev { animation: driftRev 17s ease-in-out infinite; }
+  @keyframes drift { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-14px) rotate(2deg); } }
+  @keyframes driftRev { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(10px) rotate(-2deg); } }
+  @media (prefers-reduced-motion: reduce) { .drift, .drift-slow, .drift-rev { animation: none; } }
+
+  .card-flip { perspective: 1200px; }
+  .card-flip-inner {
+    position: relative; width: 100%; height: 100%;
+    transition: transform .55s cubic-bezier(.4,.2,.2,1); transform-style: preserve-3d;
+  }
+  .card-flip[data-flipped="true"] .card-flip-inner { transform: rotateY(180deg); }
+  @media (prefers-reduced-motion: reduce) { .card-flip-inner { transition: none; } }
+  .card-face {
+    position: absolute; inset: 0; backface-visibility: hidden; border-radius: 14px;
+    border: 1px solid var(--line); padding: 1.3rem; display: flex; flex-direction: column;
+  }
+  .card-front { background: var(--bg-panel); }
+  .card-back { background: var(--bg-panel-2); transform: rotateY(180deg); justify-content: center; }
+  .drop-shadow-card { box-shadow: 0 18px 40px -20px var(--shadow); }
+
+  .noise-panel {
+    background:
+      radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--rose) 12%, transparent), transparent 40%),
+      var(--bg-panel);
+  }
+
+  .chapter-tick {
+    width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--line);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', Georgia, serif; font-size: 0.9rem; color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  #sticky-bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    background: var(--bg-panel); border-top: 1px solid var(--line);
+    box-shadow: 0 -10px 30px -16px var(--shadow);
+    transform: translateY(110%); transition: transform .3s ease;
+  }
+  #sticky-bar.show { transform: translateY(0); }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="sticky top-0 z-30" style="background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);">
+  <div class="max-w-6xl mx-auto px-5 md:px-8 h-16 flex items-center justify-between">
+    <span class="font-display text-lg" style="color: var(--ink);">Herbal Circle</span>
+    <div class="flex items-center gap-3">
+      <a href="#pillars" class="hidden sm:inline text-sm" style="color: var(--muted); text-decoration:none;">Inside the book</a>
+      <a href="#inside" class="hidden sm:inline text-sm" style="color: var(--muted); text-decoration:none;">What's covered</a>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to light mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.3A8.3 8.3 0 1 1 9.7 4a6.6 6.6 0 0 0 10.3 10.3Z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section id="hero" class="relative overflow-hidden">
+    <div class="absolute inset-0 -z-10" aria-hidden="true" style="background: radial-gradient(120% 90% at 50% -10%, color-mix(in srgb, var(--rose) 16%, transparent), transparent 55%);"></div>
+
+    <svg aria-hidden="true" class="drift absolute -top-6 -left-8 w-40 opacity-25" viewBox="0 0 100 140" fill="none" stroke="var(--rose)" stroke-width="1.2">
+      <path d="M50 130C50 100 20 90 20 60C20 35 50 15 50 5"/>
+      <path d="M50 90C50 90 30 80 28 60"/>
+      <path d="M50 70C50 70 70 62 72 42"/>
+    </svg>
+    <svg aria-hidden="true" class="drift-rev absolute top-10 -right-10 w-48 opacity-20" viewBox="0 0 100 140" fill="none" stroke="var(--gold)" stroke-width="1.2">
+      <ellipse cx="50" cy="70" rx="14" ry="34" transform="rotate(18 50 70)"/>
+      <path d="M50 36V116"/>
+    </svg>
+
+    <div class="max-w-6xl mx-auto px-5 md:px-8 pt-14 md:pt-20 pb-16 md:pb-24">
+      <div class="max-w-2xl">
+        <p class="eyebrow mb-4">Herbal Circle · Intimate Wellness — 15 Protocols</p>
+        <h1 class="text-4xl sm:text-5xl md:text-6xl leading-[1.05] mb-6" style="color: var(--ink);" data-gumroad-field="name">
+          Herbs for Sexual Health
+        </h1>
+        <p class="text-lg md:text-xl mb-8" style="color: var(--ink-soft); line-height: 1.6;">
+          Desire, circulation, and hormonal balance — covered the way the rest of your health already is: directly, with real dosing, and without embarrassment. Fifteen chapters, fifteen named protocols, one honest subject most wellness books talk around instead of through.
+        </p>
+
+        <div class="flex flex-wrap items-center gap-4 mb-6">
+          <a href="#buy" data-gumroad-action="buy" class="btn-buy" aria-label="Buy Herbs for Sexual Health">
+            Get the Book
+            <span style="font-weight:700;" data-gumroad-field="price">$18</span>
+          </a>
+          <a href="#pillars" class="btn-ghost" style="text-decoration:none;">See what's inside ↓</a>
+        </div>
+
+        <div class="flex items-center gap-2 text-sm" style="color: var(--muted);">
+          <span aria-hidden="true" style="color: var(--rose);">☆☆☆☆☆</span>
+          <span data-gumroad-field="rating"></span>
+          <span data-gumroad-field="review-count">Be the first to review</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider max-w-6xl mx-auto" />
+
+  <!-- ============ THREE PILLARS (signature interactive element) ============ -->
+  <section id="pillars" class="max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-24 reveal" aria-labelledby="pillars-heading">
+    <div class="max-w-2xl mb-10">
+      <p class="eyebrow mb-3">Three Pillars, Fifteen Protocols</p>
+      <h2 id="pillars-heading" class="text-3xl md:text-4xl mb-4" style="color: var(--ink);">Everything in this book sits under one of three pillars</h2>
+      <p style="color: var(--ink-soft); line-height: 1.7;">Tap a pillar to see what it actually gives you — every chapter under it follows the same structure: herb profile, dosing, and a named protocol you can follow.</p>
+    </div>
+
+    <ul class="grid sm:grid-cols-3 gap-5 list-none p-0 m-0 mb-8">
+      <li>
+        <button type="button" class="card-flip w-full text-left" style="height: 210px;" data-flipped="false" aria-pressed="false">
+          <span class="card-flip-inner block w-full h-full">
+            <span class="card-face card-front drop-shadow-card">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="1.6" stroke-linecap="round" class="w-7 h-7 mb-3"><path d="M12 20.5s-7.5-4.6-9.3-9A5 5 0 0 1 12 6.5a5 5 0 0 1 9.3 5c-1.8 4.4-9.3 9-9.3 9Z"/></svg>
+              <span class="font-display text-xl block mb-1" style="color: var(--ink);">Desire</span>
+              <span class="text-xs mt-auto" style="color: var(--muted);">Tap to see what's inside</span>
+            </span>
+            <span class="card-face card-back drop-shadow-card">
+              <span class="text-xs" style="color: var(--rose);">Desire chapters</span>
+              <span class="text-sm mt-2" style="color: var(--ink-soft); line-height: 1.5;">Herbs traditionally used to support libido and arousal, with practical dosing and a protocol for each.</span>
+            </span>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button type="button" class="card-flip w-full text-left" style="height: 210px;" data-flipped="false" aria-pressed="false">
+          <span class="card-flip-inner block w-full h-full">
+            <span class="card-face card-front drop-shadow-card">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="1.6" stroke-linecap="round" class="w-7 h-7 mb-3"><path d="M4 12h4l2-6 4 12 2-6h4"/></svg>
+              <span class="font-display text-xl block mb-1" style="color: var(--ink);">Circulation</span>
+              <span class="text-xs mt-auto" style="color: var(--muted);">Tap to see what's inside</span>
+            </span>
+            <span class="card-face card-back drop-shadow-card">
+              <span class="text-xs" style="color: var(--rose);">Circulation chapters</span>
+              <span class="text-sm mt-2" style="color: var(--ink-soft); line-height: 1.5;">Blood-flow–supportive botanicals explained plainly, with the same herb-plus-protocol format throughout.</span>
+            </span>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button type="button" class="card-flip w-full text-left" style="height: 210px;" data-flipped="false" aria-pressed="false">
+          <span class="card-flip-inner block w-full h-full">
+            <span class="card-face card-front drop-shadow-card">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="1.6" stroke-linecap="round" class="w-7 h-7 mb-3"><circle cx="12" cy="12" r="3.4"/><path d="M12 3.2v2.6M12 18.2v2.6M4.9 6l1.8 1.8M17.3 16.2l1.8 1.8M3.2 12h2.6M18.2 12h2.6M4.9 18l1.8-1.8M17.3 7.8l1.8-1.8"/></svg>
+              <span class="font-display text-xl block mb-1" style="color: var(--ink);">Hormonal Balance</span>
+              <span class="text-xs mt-auto" style="color: var(--muted);">Tap to see what's inside</span>
+            </span>
+            <span class="card-face card-back drop-shadow-card">
+              <span class="text-xs" style="color: var(--rose);">Hormonal balance chapters</span>
+              <span class="text-sm mt-2" style="color: var(--ink-soft); line-height: 1.5;">Support for the hormonal side of intimate wellbeing, with medical-caution guidance built into every chapter.</span>
+            </span>
+          </span>
+        </button>
+      </li>
+    </ul>
+
+    <div class="flex flex-wrap items-center gap-2" aria-hidden="true">
+      <span class="text-xs mr-2" style="color: var(--muted);">15 chapters total —</span>
+      <span class="chapter-tick">01</span><span class="chapter-tick">02</span><span class="chapter-tick">03</span>
+      <span class="chapter-tick">04</span><span class="chapter-tick">05</span><span class="chapter-tick">06</span>
+      <span class="chapter-tick">07</span><span class="chapter-tick">08</span><span class="chapter-tick">09</span>
+      <span class="chapter-tick">10</span><span class="chapter-tick">11</span><span class="chapter-tick">12</span>
+      <span class="chapter-tick">13</span><span class="chapter-tick">14</span><span class="chapter-tick">15</span>
+    </div>
+  </section>
+
+  <hr class="divider max-w-6xl mx-auto" />
+
+  <!-- ============ HOW IT'S USED ============ -->
+  <section class="max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-24 reveal" aria-labelledby="how-heading">
+    <p class="eyebrow mb-3">How you'll actually use it</p>
+    <h2 id="how-heading" class="text-3xl md:text-4xl mb-10 max-w-xl" style="color: var(--ink);">Three steps, every chapter</h2>
+    <ol class="grid md:grid-cols-3 gap-8 list-none p-0 m-0">
+      <li>
+        <span class="font-display text-3xl block mb-3" style="color: var(--rose);">01</span>
+        <h3 class="font-display text-xl mb-2" style="color: var(--ink);">Find your chapter</h3>
+        <p style="color: var(--ink-soft); line-height: 1.6;">Go straight to the pillar — desire, circulation, or hormonal balance — that matches what you're working on.</p>
+      </li>
+      <li>
+        <span class="font-display text-3xl block mb-3" style="color: var(--rose);">02</span>
+        <h3 class="font-display text-xl mb-2" style="color: var(--ink);">Read the herb profile</h3>
+        <p style="color: var(--ink-soft); line-height: 1.6;">Practical dosing kept intact, explained plainly, with medical-caution guidance woven right in — not tucked in a disclaimer.</p>
+      </li>
+      <li>
+        <span class="font-display text-3xl block mb-3" style="color: var(--rose);">03</span>
+        <h3 class="font-display text-xl mb-2" style="color: var(--ink);">Follow the protocol</h3>
+        <p style="color: var(--ink-soft); line-height: 1.6;">Each chapter is built around its own named, repeatable protocol — a real practice, not a loose herb list.</p>
+      </li>
+    </ol>
+  </section>
+
+  <hr class="divider max-w-6xl mx-auto" />
+
+  <!-- ============ WHAT'S INSIDE ============ -->
+  <section id="inside" class="max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-24 reveal" aria-labelledby="inside-heading">
+    <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-start">
+      <div>
+        <p class="eyebrow mb-3">What's inside</p>
+        <h2 id="inside-heading" class="text-3xl md:text-4xl mb-6" style="color: var(--ink);">Vitality isn't separate from wellness. It's a room in the same house.</h2>
+        <p style="color: var(--ink-soft); line-height: 1.7;">Most wellness content skips this subject or talks around it. This book treats it like the rest of your health deserves — plainly, respectfully, and with real information.</p>
+      </div>
+      <ul class="space-y-5 list-none p-0 m-0">
+        <li class="pb-5 flex gap-4" style="border-bottom: 1px solid var(--line);">
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--rose);">·</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;">15 chapters, each built around its own named, repeatable protocol</span>
+        </li>
+        <li class="pb-5 flex gap-4" style="border-bottom: 1px solid var(--line);">
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--rose);">·</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;">Practical dosing information kept intact throughout — something you can actually follow</span>
+        </li>
+        <li class="pb-5 flex gap-4" style="border-bottom: 1px solid var(--line);">
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--rose);">·</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;">Herbs traditionally used for desire, circulation, and hormonal balance, explained plainly</span>
+        </li>
+        <li class="flex gap-4">
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--rose);">·</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;">Clear medical-caution guidance woven through every chapter, not a single page at the end</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <hr class="divider max-w-6xl mx-auto" />
+
+  <!-- ============ WHO IT'S FOR + REVIEWS ============ -->
+  <section class="max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-24 reveal">
+    <div class="grid md:grid-cols-2 gap-12">
+      <div class="noise-panel p-8 rounded-2xl" style="border: 1px solid var(--line);">
+        <p class="eyebrow mb-3">Who it's for</p>
+        <p class="font-display text-2xl mb-4" style="color: var(--ink); line-height: 1.4;">Anyone who's noticed this part of wellness gets the least honest information — and wants a resource that treats it like the rest of their health.</p>
+        <p style="color: var(--muted);">Vitality isn't a separate topic. It's part of the same whole.</p>
+      </div>
+      <div class="p-8 rounded-2xl" style="border: 1px solid var(--line); background: var(--bg-panel);">
+        <p class="eyebrow mb-3">Readers</p>
+        <div class="flex items-center gap-2 mb-2" style="color: var(--rose); font-size: 1.1rem;" aria-hidden="true">☆☆☆☆☆</div>
+        <p class="text-lg" style="color: var(--ink);">
+          <span data-gumroad-field="rating"></span>
+          <span data-gumroad-field="review-count">Be the first to review</span>
+        </p>
+        <p class="text-sm mt-3" style="color: var(--muted);">Reviews appear here once readers leave them on Gumroad.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FINAL CTA ============ -->
+  <section id="buy" class="relative overflow-hidden py-20 md:py-28">
+    <div class="absolute inset-0 -z-10" aria-hidden="true" style="background: radial-gradient(90% 120% at 50% 110%, color-mix(in srgb, var(--rose) 18%, transparent), transparent 60%), var(--bg-panel);"></div>
+    <div class="max-w-3xl mx-auto px-5 md:px-8 text-center">
+      <p class="eyebrow mb-4">Herbal Circle · Intimate Wellness</p>
+      <h2 class="text-3xl md:text-5xl mb-6" style="color: var(--ink);">15 chapters. 15 protocols. One honest book.</h2>
+      <p class="text-lg mb-9" style="color: var(--ink-soft);">Desire, circulation, and hormonal balance — covered plainly, with dosing you can use tonight.</p>
+      <a href="#" data-gumroad-action="buy" class="btn-buy text-lg" aria-label="Buy Herbs for Sexual Health">
+        Get the Book — <span data-gumroad-field="price">$18</span>
+      </a>
+      <p class="text-xs mt-6" style="color: var(--muted);">Educational content only, not a substitute for medical advice. Certain herbs interact with medications and hormonal conditions.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="max-w-6xl mx-auto px-5 md:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-4" style="border-top: 1px solid var(--line);">
+  <span class="font-display text-lg" style="color: var(--ink);">Herbal Circle</span>
+  <p class="text-xs text-center sm:text-right" style="color: var(--muted); max-width: 32rem;">Educational content only, not a substitute for medical advice. Certain herbs interact with medications and hormonal conditions — consult a healthcare provider before use.</p>
+</footer>
+
+<div id="sticky-bar" class="md:hidden">
+  <div class="flex items-center justify-between gap-4 px-4 py-3">
+    <div>
+      <p class="text-xs" style="color: var(--muted);">Herbs for Sexual Health</p>
+      <p class="font-display text-lg" style="color: var(--ink);" data-gumroad-field="price">$18</p>
+    </div>
+    <a href="#" data-gumroad-action="buy" class="btn-buy" aria-label="Buy Herbs for Sexual Health">Get it</a>
+  </div>
+</div>
+
+<script>
+  (function () {
+    "use strict";
+    var root = document.documentElement;
+    var toggle = document.getElementById('theme-toggle');
+
+    function currentIsLight() {
+      var explicit = root.getAttribute('data-theme');
+      if (explicit) return explicit === 'light';
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+    }
+    function applyToggleLabel() {
+      var light = currentIsLight();
+      toggle.setAttribute('aria-pressed', String(light));
+      toggle.setAttribute('aria-label', light ? 'Switch to dark mode' : 'Switch to light mode');
+    }
+    applyToggleLabel();
+    toggle.addEventListener('click', function () {
+      var next = currentIsLight() ? 'dark' : 'light';
+      root.setAttribute('data-theme', next);
+      applyToggleLabel();
+      try { window.localStorage.setItem('hc-theme', next); } catch (e) {}
+    });
+    try {
+      var saved = window.localStorage.getItem('hc-theme');
+      if (saved === 'light' || saved === 'dark') { root.setAttribute('data-theme', saved); applyToggleLabel(); }
+    } catch (e) {}
+
+    var cards = document.querySelectorAll('.card-flip');
+    cards.forEach(function (card) {
+      card.addEventListener('click', function () {
+        var flipped = card.getAttribute('data-flipped') === 'true';
+        card.setAttribute('data-flipped', String(!flipped));
+        card.setAttribute('aria-pressed', String(!flipped));
+      });
+    });
+
+    var revealEls = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); }
+        });
+      }, { threshold: 0.12 });
+      revealEls.forEach(function (el) { io.observe(el); });
+    } else {
+      revealEls.forEach(function (el) { el.classList.add('in-view'); });
+    }
+
+    var stickyBar = document.getElementById('sticky-bar');
+    var hero = document.getElementById('hero');
+    if ('IntersectionObserver' in window && stickyBar && hero) {
+      var heroObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) { stickyBar.classList.remove('show'); }
+          else { stickyBar.classList.add('show'); }
+        });
+      }, { threshold: 0 });
+      heroObserver.observe(hero);
+    }
+  })();
+</script>
+
+</body>
+</html>
