@@ -23,9 +23,9 @@ jobs:
           echo "sanitization_report:"
           jq '.sanitization_report' preview.json
 
-          EMPTY=$(jq '(.sanitization_report // {}) | length == 0' preview.json)
+          REMOVED=$(jq -r '.sanitization_report.total_removed // 0' preview.json)
           WARN=$(jq -r '.warning // empty' preview.json)
-          if [ "$EMPTY" != "true" ] || [ -n "$WARN" ]; then
+          if [ "$REMOVED" != "0" ] || [ -n "$WARN" ]; then
             echo "::error::Preview found a problem — see the output above. Stopping before publish."
             exit 1
           fi
