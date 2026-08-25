@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --bg: #1B2415; --bg-panel: #232E1B; --bg-panel-2: #29341F;
+    --ink: #F1ECDF; --ink-soft: #D9D2BE; --muted: #B7C0A6;
+    --gold: #D4AF37; --gold-strong: #E9C766; --amber: #D19A52;
+    --line: rgba(212, 175, 55, 0.28); --shadow: rgba(0, 0, 0, 0.45); --focus: #E9C766;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme]) {
+      --bg: #F6F1E3; --bg-panel: #FFFFFF; --bg-panel-2: #FBF7EA;
+      --ink: #22301A; --ink-soft: #37432B; --muted: #5B6B4C;
+      --gold: #8A6A14; --gold-strong: #6E5410; --amber: #8F5F1E;
+      --line: rgba(90, 70, 15, 0.22); --shadow: rgba(60, 50, 20, 0.12); --focus: #6E5410;
+    }
+  }
+  html[data-theme="light"] {
+    --bg: #F6F1E3; --bg-panel: #FFFFFF; --bg-panel-2: #FBF7EA;
+    --ink: #22301A; --ink-soft: #37432B; --muted: #5B6B4C;
+    --gold: #8A6A14; --gold-strong: #6E5410; --amber: #8F5F1E;
+    --line: rgba(90, 70, 15, 0.22); --shadow: rgba(60, 50, 20, 0.12); --focus: #6E5410;
+  }
+  html[data-theme="dark"] {
+    --bg: #1B2415; --bg-panel: #232E1B; --bg-panel-2: #29341F;
+    --ink: #F1ECDF; --ink-soft: #D9D2BE; --muted: #B7C0A6;
+    --gold: #D4AF37; --gold-strong: #E9C766; --amber: #D19A52;
+    --line: rgba(212, 175, 55, 0.28); --shadow: rgba(0, 0, 0, 0.45); --focus: #E9C766;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color .35s ease, color .35s ease;
+    margin: 0;
+  }
+  h1, h2, h3, .font-display {
+    font-family: 'Cormorant Garamond', Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: 0.01em;
+  }
+  .eyebrow {
+    font-family: 'Inter', system-ui, sans-serif; font-size: 0.72rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--amber); font-weight: 600;
+  }
+  ::selection { background: var(--amber); color: var(--bg); }
+  a, button { font-family: inherit; }
+  :focus-visible { outline: 2.5px solid var(--focus); outline-offset: 3px; border-radius: 3px; }
+  .skip-link {
+    position: absolute; left: -9999px; top: 0; z-index: 100;
+    background: var(--gold); color: var(--bg); padding: 10px 16px; border-radius: 0 0 6px 0; font-weight: 600;
+  }
+  .skip-link:focus { left: 0; }
+  .divider { height: 1px; background: var(--line); border: 0; }
+
+  .btn-buy {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    background: var(--gold); color: var(--bg); font-weight: 700; letter-spacing: 0.01em;
+    padding: 0.95rem 1.9rem; border-radius: 999px; border: none; cursor: pointer;
+    box-shadow: 0 10px 30px -12px var(--shadow);
+    transition: transform .18s ease, box-shadow .18s ease, background-color .2s ease;
+    text-decoration: none; font-size: 1rem;
+  }
+  .btn-buy:hover { transform: translateY(-2px); background: var(--gold-strong); }
+  .btn-buy:active { transform: translateY(0); }
+  .btn-ghost {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    background: transparent; color: var(--ink); border: 1px solid var(--line);
+    padding: 0.9rem 1.6rem; border-radius: 999px; font-weight: 600; cursor: pointer;
+    transition: border-color .2s ease, background-color .2s ease;
+  }
+  .btn-ghost:hover { border-color: var(--amber); background: color-mix(in srgb, var(--amber) 10%, transparent); }
+
+  .theme-toggle {
+    width: 42px; height: 42px; border-radius: 999px; border: 1px solid var(--line);
+    background: var(--bg-panel); color: var(--ink);
+    display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .theme-toggle svg { width: 18px; height: 18px; }
+  html[data-theme="light"] .icon-moon,
+  html:not([data-theme="dark"]):not([data-theme="light"]) .icon-moon { display: none; }
+  html[data-theme="dark"] .icon-sun,
+  html:not([data-theme="dark"]):not([data-theme="light"]) .icon-sun { display: none; }
+  @media (prefers-color-scheme: light) {
+    html:not([data-theme]) .icon-moon { display: none; }
+    html:not([data-theme]) .icon-sun { display: inline; }
+  }
+
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in-view { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+  .drift { animation: drift 14s ease-in-out infinite; }
+  .drift-rev { animation: driftRev 17s ease-in-out infinite; }
+  @keyframes drift { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-14px) rotate(2deg); } }
+  @keyframes driftRev { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(10px) rotate(-2deg); } }
+  @media (prefers-reduced-motion: reduce) { .drift, .drift-rev { animation: none; } }
+
+  .card-flip { perspective: 1200px; }
+  .card-flip-inner {
+    position: relative; width: 100%; height: 100%;
+    transition: transform .55s cubic-bezier(.4,.2,.2,1); transform-style: preserve-3d;
+  }
+  .card-flip[data-flipped="true"] .card-flip-inner { transform: rotateY(180deg); }
+  @media (prefers-reduced-motion: reduce) { .card-flip-inner { transition: none; } }
+  .card-face {
+    position: absolute; inset: 0; backface-visibility: hidden; border-radius: 14px;
+    border: 1px solid var(--line); padding: 1.25rem; display: flex; flex-direction: column;
+  }
+  .card-front { background: var(--bg-panel); }
+  .card-back { background: var(--bg-panel-2); }
+  .card-back .stage-list { margin: 0; padding-left: 1.1rem; }
+  .card-back .stage-list li { margin-bottom: 0.3rem; }
+  .card-flip[data-flipped="true"] .card-back { transform: none; }
+  .card-face.card-back { transform: rotateY(180deg); }
+
+  .drop-shadow-card { box-shadow: 0 18px 40px -20px var(--shadow); }
+  .noise-panel {
+    background: radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--amber) 12%, transparent), transparent 40%), var(--bg-panel);
+  }
+  .stage-number {
+    font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.6rem; color: var(--amber);
+  }
+
+  #sticky-bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    background: var(--bg-panel); border-top: 1px solid var(--line);
+    box-shadow: 0 -10px 30px -16px var(--shadow);
+    transform: translateY(110%); transition: transform .3s ease;
+  }
+  #sticky-bar.show { transform: translateY(0); }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="sticky top-0 z-30" style="background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);">
+  <div class="max-w-6xl mx-auto px-5 md:px-8 h-16 flex items-center justify-between">
+    <span class="font-display text-lg" style="color: var(--ink);">Herbal Circle</span>
+    <div class="flex items-center gap-3">
+      <a href="#system" class="hidden sm:inline text-sm" style="color: var(--muted); text-decoration:none;">The 6 books</a>
+      <a href="#inside" class="hidden sm:inline text-sm" style="color: var(--muted); text-decoration:none;">What's inside</a>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to light mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.3A8.3 8.3 0 1 1 9.7 4a6.6 6.6 0 0 0 10.3 10.3Z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section id="hero" class="relative overflow-hidden">
+    <div class="absolute inset-0 -z-10" aria-hidden="true" style="background: radial-gradient(120% 90% at 50% -10%, color-mix(in srgb, var(--amber) 15%, transparent), transparent 55%);"></div>
+    <svg aria-hidden="true" class="drift absolute -top-6 -left-8 w-40 opacity-25" viewBox="0 0 100 140" fill="none" stroke="var(--amber)" stroke-width="1.2">
+      <path d="M50 130C50 100 20 90 20 60C20 35 50 15 50 5"/>
+      <path d="M50 90C50 90 30 80 28 60"/>
+    </svg>
+    <svg aria-hidden="true" class="drift-rev absolute top-10 -right-10 w-48 opacity-20" viewBox="0 0 100 140" fill="none" stroke="var(--gold)" stroke-width="1.2">
+      <ellipse cx="50" cy="70" rx="14" ry="34" transform="rotate(18 50 70)"/>
+      <path d="M50 36V116"/>
+    </svg>
+
+    <div class="max-w-6xl mx-auto px-5 md:px-8 pt-14 md:pt-20 pb-16 md:pb-24">
+      <div class="max-w-2xl">
+        <p class="eyebrow mb-4">Herbal Circle · Herbal Beauty &amp; Business — 6-Book System</p>
+        <h1 class="text-4xl sm:text-5xl md:text-6xl leading-[1.05] mb-6" style="color: var(--ink);" data-gumroad-field="name">
+          Herbal Cosmetics Business Starter Kit
+        </h1>
+        <p class="text-lg md:text-xl mb-8" style="color: var(--ink-soft); line-height: 1.6;">
+          Everything between "I like making my own skincare" and "I sell it." Six complete guides carry you from your first formula to a manufactured product, a real brand, and — if you want it — outside funding to grow.
+        </p>
+        <div class="flex flex-wrap items-center gap-4 mb-6">
+          <a href="#buy" data-gumroad-action="buy" class="btn-buy" aria-label="Buy the Herbal Cosmetics Business Starter Kit">
+            Get the Full Kit
+            <span style="font-weight:700;" data-gumroad-field="price">$65</span>
+          </a>
+          <a href="#system" class="btn-ghost" style="text-decoration:none;">See all 6 books ↓</a>
+        </div>
+        <div class="flex items-center gap-2 text-sm" style="color: var(--muted);">
+          <span aria-hidden="true" style="color: var(--amber);">☆☆☆☆☆</span>
+          <span data-gumroad-field="rating"></span>
+          <span data-gumroad-field="review-count">Be the first to review</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider max-w-6xl mx-auto" />
+
+  <!-- ============ THE SIX-BOOK SYSTEM (signature interactive element) ============ -->
+  <section id="system" class="max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-24 reveal" aria-labelledby="system-heading">
+    <div class="max-w-2xl mb-10">
+      <p class="eyebrow mb-3">The path, book by book</p>
+      <h2 id="system-heading" class="text-3xl md:text-4xl mb-4" style="color: var(--ink);">Formulate. Manufacture. Brand. Sell. Fund.</h2>
+      <p style="color: var(--ink-soft); line-height: 1.7;">Each stage is its own complete guide. Tap a book to see what's actually covered.</p>
+    </div>
+
+    <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 list-none p-0 m-0">
+
+      <li>
+        <button type="button" class="card-flip w-full text-left" style="height: 260px;" data-flipped="false" aria-pressed="false">
+          <span class="card-flip-inner block w-full h-full">
+            <span class="card-face card-front drop-shadow-card">
+              <span class="stage-number block mb-2">01</span>
+              <span class="font-display text-xl block mb-1" style="color: var(--ink);">Herbal Beauty Lab</span>
+              <span class="text-xs" style="color: var(--muted);">Formulate</span>
+              <span class="text-xs mt-auto pt-3" style="color: var(--muted);">Tap to see what's inside</span>
+            </span>
+            <span class="card-face card-back drop-shadow-card">
+              <span class="text-xs mb-2" style="color: var(--amber);">What's inside</span>
+              <ul class="stage-list text-sm" style="color: var(--ink-soft); line-height: 1.5;">
+                <li>Three kinds of formulation, explained plainly</li>
+                <li>A preservation compendium (aloe, rosemary, turmeric, lavender, honey)</li>
+                <li>Scrubs, soap base, and herbal face masks</li>
+              </ul>
+            </span>
+          </span>
+        </button>
+      </li>
+
+      <li>
+        <button type="button" class="card-flip w-full text-left" style="height: 260px;" data-flipped="false" aria-pressed="false">
+          <span class="card-flip-inner block w-full h-full">
+            <span class="card-face card-front drop-shadow-card">
+              <span class="stage-number block mb-2">02</span>
+              <span class="font-display text-xl block mb-1" style="color: var(--ink);">Manufacturing &amp; Production Guide</span>
+              <span class="text-xs" style="color: var(--muted);">Manufacture</span>
+              <span class="text-xs mt-auto pt-3" style="color: var(--muted);">Tap to see what's inside</span>
+            </span>
+            <span class="card-face card-back drop-shadow-card">
+              <span class="text-xs mb-2" style="color: var(--amber);">What's inside</span>
+              <ul class="stage-list text-sm" style="color: var(--ink-soft); line-height: 1.5;">
+                <li>The eight-stage production workflow</li>
+                <li>US (MoCRA) &amp; UK cosmetics compliance, plain-language</li>
+                <li>COGS, margins, and packaging as brand architecture</li>
+              </ul>
+            </span>
+          </span>
+        </button>
+      </li>
+
+      <li>
+        <button type="button" class="card-flip w-full text-left" style="height: 260px;" data-flipped="false" aria-pressed="false">
+          <span class="card-flip-inner block w-full h-full">
+            <span class="card-face card-front drop-shadow-card">
+              <span class="stage-number block mb-2">03</span>
+              <span class="font-display text-xl block mb-1" style="color: var(--ink);">Branding &amp; Marketing Resources</span>
+              <span class="text-xs" style="color: var(--muted);">Brand</span>
+              <span class="text-xs mt-auto pt-3" style="color: var(--muted);">Tap to see what's inside</span>
+            </span>
+            <span class="card-face card-back drop-shadow-card">
+              <span class="text-xs mb-2" style="color: var(--amber);">What's inside</span>
+              <ul class="stage-list text-sm" style="color: var(--ink-soft); line-height: 1.5;">
+                <li>The five-pillar brand identity architecture</li>
+                <li>Colour psychology and a social content system</li>
+                <li>A ready-to-use AI prompt library for brand builders</li>
+              </ul>
+            </span>
+          </span>
+        </button>
+      </li>
+
+      <li>
+        <button type="button" class="card-flip w-full text-left" style="height: 260px;" data-flipped="false" aria-pressed="false">
+          <span class="card-flip-inner block w-full h-full">
+            <span class="card-face card-front drop-shadow-card">
+              <span class="stage-number block mb-2">04</span>
+              <span class="font-display text-xl block mb-1" style="color: var(--ink);">Market &amp; Industry Analytics Report</span>
+              <span class="text-xs" style="color: var(--muted);">Understand the market</span>
+              <span class="text-xs mt-auto pt-3" style="color: var(--muted);">Tap to see what's inside</span>
+            </span>
+            <span class="card-face card-back drop-shadow-card">
+              <span class="text-xs mb-2" style="color: var(--amber);">What's inside</span>
+              <ul class="stage-list text-sm" style="color: var(--ink-soft); line-height: 1.5;">
+                <li>Five forces driving global growth in herbal beauty</li>
+                <li>US vs. UK market data and competitor profiles</li>
+                <li>Unit economics and a break-even framework</li>
+              </ul>
+            </span>
+          </span>
+        </button>
+      </li>
+
+      <li>
+        <button type="button" class="card-flip w-full text-left" style="height: 260px;" data-flipped="false" aria-pressed="false">
+          <span class="card-flip-inner block w-full h-full">
+            <span class="card-face card-front drop-shadow-card">
+              <span class="stage-number block mb-2">05</span>
+              <span class="font-display text-xl block mb-1" style="color: var(--ink);">Sales &amp; Distribution Systems Guide</span>
+              <span class="text-xs" style="color: var(--muted);">Sell</span>
+              <span class="text-xs mt-auto pt-3" style="color: var(--muted);">Tap to see what's inside</span>
+            </span>
+            <span class="card-face card-back drop-shadow-card">
+              <span class="text-xs mb-2" style="color: var(--amber);">What's inside</span>
+              <ul class="stage-list text-sm" style="color: var(--ink-soft); line-height: 1.5;">
+                <li>Etsy, Shopify, and Amazon Handmade, compared honestly</li>
+                <li>A worked pricing formula, not just a rule of thumb</li>
+                <li>TikTok, Instagram, Pinterest &amp; YouTube strategy</li>
+              </ul>
+            </span>
+          </span>
+        </button>
+      </li>
+
+      <li>
+        <button type="button" class="card-flip w-full text-left" style="height: 260px;" data-flipped="false" aria-pressed="false">
+          <span class="card-flip-inner block w-full h-full">
+            <span class="card-face card-front drop-shadow-card">
+              <span class="stage-number block mb-2">06</span>
+              <span class="font-display text-xl block mb-1" style="color: var(--ink);">Investor &amp; Funding Strategies Guide</span>
+              <span class="text-xs" style="color: var(--muted);">Fund &amp; grow</span>
+              <span class="text-xs mt-auto pt-3" style="color: var(--muted);">Tap to see what's inside</span>
+            </span>
+            <span class="card-face card-back drop-shadow-card">
+              <span class="text-xs mb-2" style="color: var(--amber);">What's inside</span>
+              <ul class="stage-list text-sm" style="color: var(--ink-soft); line-height: 1.5;">
+                <li>Angels, crowdfunding, accelerators &amp; grants compared</li>
+                <li>The six lenses every investor applies to your brand</li>
+                <li>Unit economics and brand equity, presented credibly</li>
+              </ul>
+            </span>
+          </span>
+        </button>
+      </li>
+
+    </ul>
+  </section>
+
+  <hr class="divider max-w-6xl mx-auto" />
+
+  <!-- ============ WHAT'S INSIDE ============ -->
+  <section id="inside" class="max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-24 reveal" aria-labelledby="inside-heading">
+    <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-start">
+      <div>
+        <p class="eyebrow mb-3">Why a kit, not one book</p>
+        <h2 id="inside-heading" class="text-3xl md:text-4xl mb-6" style="color: var(--ink);">Most formulators stall at the same point</h2>
+        <p style="color: var(--ink-soft); line-height: 1.7;">Not because the recipes are wrong — because nobody handed them the manufacturing, compliance, branding, and sales side that turns a formula into a business. This kit is that other half.</p>
+      </div>
+      <ul class="space-y-5 list-none p-0 m-0">
+        <li class="pb-5 flex gap-4" style="border-bottom: 1px solid var(--line);">
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--amber);">·</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;">Six full guides, from first formula to funded brand — not one book stretched thin</span>
+        </li>
+        <li class="pb-5 flex gap-4" style="border-bottom: 1px solid var(--line);">
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--amber);">·</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;">Real compliance guidance for both the US (MoCRA) and UK markets</span>
+        </li>
+        <li class="pb-5 flex gap-4" style="border-bottom: 1px solid var(--line);">
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--amber);">·</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;">Worked pricing and unit-economics formulas, not just rules of thumb</span>
+        </li>
+        <li class="flex gap-4">
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--amber);">·</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;">A funding guide most cosmetics resources skip entirely</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <hr class="divider max-w-6xl mx-auto" />
+
+  <!-- ============ WHO IT'S FOR + REVIEWS ============ -->
+  <section class="max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-24 reveal">
+    <div class="grid md:grid-cols-2 gap-12">
+      <div class="noise-panel p-8 rounded-2xl" style="border: 1px solid var(--line);">
+        <p class="eyebrow mb-3">Who it's for</p>
+        <p class="font-display text-2xl mb-4" style="color: var(--ink); line-height: 1.4;">Herbalists and skincare hobbyists ready to formulate seriously — and anyone weighing whether their homemade products could become a real business.</p>
+        <p style="color: var(--muted);">From formula to formula-fied business.</p>
+      </div>
+      <div class="p-8 rounded-2xl" style="border: 1px solid var(--line); background: var(--bg-panel);">
+        <p class="eyebrow mb-3">Readers</p>
+        <div class="flex items-center gap-2 mb-2" style="color: var(--amber); font-size: 1.1rem;" aria-hidden="true">☆☆☆☆☆</div>
+        <p class="text-lg" style="color: var(--ink);">
+          <span data-gumroad-field="rating"></span>
+          <span data-gumroad-field="review-count">Be the first to review</span>
+        </p>
+        <p class="text-sm mt-3" style="color: var(--muted);">Reviews appear here once readers leave them on Gumroad.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FINAL CTA ============ -->
+  <section id="buy" class="relative overflow-hidden py-20 md:py-28">
+    <div class="absolute inset-0 -z-10" aria-hidden="true" style="background: radial-gradient(90% 120% at 50% 110%, color-mix(in srgb, var(--amber) 18%, transparent), transparent 60%), var(--bg-panel);"></div>
+    <div class="max-w-3xl mx-auto px-5 md:px-8 text-center">
+      <p class="eyebrow mb-4">Herbal Circle · 6-Book System</p>
+      <h2 class="text-3xl md:text-5xl mb-6" style="color: var(--ink);">Everything to go from formula to funded brand</h2>
+      <p class="text-lg mb-9" style="color: var(--ink-soft);">Formulate, manufacture, brand, understand the market, sell, and fund — six guides, one kit.</p>
+      <a href="#" data-gumroad-action="buy" class="btn-buy text-lg" aria-label="Buy the Herbal Cosmetics Business Starter Kit">
+        Get the Full Kit — <span data-gumroad-field="price">$65</span>
+      </a>
+      <p class="text-xs mt-6" style="color: var(--muted);">Always patch-test new formulations, and check current MoCRA (US) or UK cosmetics regulations before selling commercially.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="max-w-6xl mx-auto px-5 md:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-4" style="border-top: 1px solid var(--line);">
+  <span class="font-display text-lg" style="color: var(--ink);">Herbal Circle</span>
+  <p class="text-xs text-center sm:text-right" style="color: var(--muted); max-width: 32rem;">Educational content only. Always patch-test new formulations and confirm current cosmetics regulations for your market before selling commercially.</p>
+</footer>
+
+<div id="sticky-bar" class="md:hidden">
+  <div class="flex items-center justify-between gap-4 px-4 py-3">
+    <div>
+      <p class="text-xs" style="color: var(--muted);">Herbal Cosmetics Business Starter Kit</p>
+      <p class="font-display text-lg" style="color: var(--ink);" data-gumroad-field="price">$65</p>
+    </div>
+    <a href="#" data-gumroad-action="buy" class="btn-buy" aria-label="Buy the Herbal Cosmetics Business Starter Kit">Get it</a>
+  </div>
+</div>
+
+<script>
+  (function () {
+    "use strict";
+    var root = document.documentElement;
+    var toggle = document.getElementById('theme-toggle');
+
+    function currentIsLight() {
+      var explicit = root.getAttribute('data-theme');
+      if (explicit) return explicit === 'light';
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+    }
+    function applyToggleLabel() {
+      var light = currentIsLight();
+      toggle.setAttribute('aria-pressed', String(light));
+      toggle.setAttribute('aria-label', light ? 'Switch to dark mode' : 'Switch to light mode');
+    }
+    applyToggleLabel();
+    toggle.addEventListener('click', function () {
+      var next = currentIsLight() ? 'dark' : 'light';
+      root.setAttribute('data-theme', next);
+      applyToggleLabel();
+      try { window.localStorage.setItem('hc-theme', next); } catch (e) {}
+    });
+    try {
+      var saved = window.localStorage.getItem('hc-theme');
+      if (saved === 'light' || saved === 'dark') { root.setAttribute('data-theme', saved); applyToggleLabel(); }
+    } catch (e) {}
+
+    var cards = document.querySelectorAll('.card-flip');
+    cards.forEach(function (card) {
+      card.addEventListener('click', function () {
+        var flipped = card.getAttribute('data-flipped') === 'true';
+        card.setAttribute('data-flipped', String(!flipped));
+        card.setAttribute('aria-pressed', String(!flipped));
+      });
+    });
+
+    var revealEls = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); }
+        });
+      }, { threshold: 0.12 });
+      revealEls.forEach(function (el) { io.observe(el); });
+    } else {
+      revealEls.forEach(function (el) { el.classList.add('in-view'); });
+    }
+
+    var stickyBar = document.getElementById('sticky-bar');
+    var hero = document.getElementById('hero');
+    if ('IntersectionObserver' in window && stickyBar && hero) {
+      var heroObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) { stickyBar.classList.remove('show'); }
+          else { stickyBar.classList.add('show'); }
+        });
+      }, { threshold: 0 });
+      heroObserver.observe(hero);
+    }
+  })();
+</script>
+
+</body>
+  </html>
