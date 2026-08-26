@@ -196,6 +196,384 @@
     </div>
 
     <div class="rounded-2xl p-5 md:p-8 drop-shadow-card" style="background: var(--bg-panel); border: 1px solid var(--line); box-shadow: 0 18px 40px -20px var(--shadow);">
+      <svg viewBox="0 0 600 200" class="w-full h-auto" role="img" aria-describedby="curve-caption">
+        <line x1="40" y1="190" x2="580" y2="190" stroke="var(--line)" stroke-width="1"/>
+        <path class="curve-path curve-path-healthy" id="path-healthy" d="M60,40 C160,55 200,90 300,110 C400,130 460,150 540,160" fill="none" stroke-width="3" stroke-linecap="round"/>
+        <path class="curve-path curve-path-disrupted" id="path-disrupted" d="M60,120 C160,140 220,150 300,150 C380,150 420,70 540,55" fill="none" stroke-width="3" stroke-linecap="round" style="opacity:0"/>
+        <g id="dots-healthy" class="curve-dot">
+          <circle cx="60" cy="40" r="4" fill="var(--gold)"/>
+          <circle cx="300" cy="110" r="4" fill="var(--gold)"/>
+          <circle cx="540" cy="160" r="4" fill="var(--gold)"/>
+        </g>
+        <g id="dots-disrupted" class="curve-dot" style="opacity:0">
+          <circle cx="60" cy="120" r="4" fill="var(--ember)"/>
+          <circle cx="300" cy="150" r="4" fill="var(--ember)"/>
+          <circle cx="540" cy="55" r="4" fill="var(--ember)"/>
+        </g>
+      </svg>
+      <div class="flex justify-between mt-2 text-xs" style="color: var(--muted);" aria-hidden="true">
+        <span>Morning</span>
+        <span>Afternoon</span>
+        <span>Night</span>
+      </div>
+      <p id="curve-caption" class="text-sm mt-4" style="color: var(--ink-soft); line-height: 1.6;" aria-live="polite">
+        <span id="caption-healthy">The target shape: cortisol high in the morning to get you moving, easing gradually so you can wind down by night.</span>
+        <span id="caption-disrupted" class="hidden">The pattern this book addresses: low morning energy (wired but tired), a dip that hits mid-afternoon, and a spike right when you're trying to sleep (evening overstimulation).</span>
+      </p>
+    </div>
+  </section>
+
+  <hr class="divider max-w-6xl mx-auto" />
+
+  <!-- ============ THE THREE PATTERNS ============ -->
+  <section class="max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-24 reveal" aria-labelledby="patterns-heading">
+    <p class="eyebrow mb-3">Named protocols for each pattern</p>
+    <h2 id="patterns-heading" class="text-3xl md:text-4xl mb-10 max-w-xl" style="color: var(--ink);">Three ways the curve loses its shape</h2>
+    <ul class="grid md:grid-cols-3 gap-8 list-none p-0 m-0">
+      <li>
+        <span class="font-display text-3xl block mb-3" style="color: var(--ember);">01</span>
+        <h3 class="font-display text-xl mb-2" style="color: var(--ink);">Wired but tired</h3>
+        <p style="color: var(--ink-soft); line-height: 1.6;">Mornings that never quite wake up, no matter how much sleep you got.</p>
+      </li>
+      <li>
+        <span class="font-display text-3xl block mb-3" style="color: var(--ember);">02</span>
+        <h3 class="font-display text-xl mb-2" style="color: var(--ink);">The afternoon crash</h3>
+        <p style="color: var(--ink-soft); line-height: 1.6;">A hard drop that hits at the same time, every day, whether you've eaten or not.</p>
+      </li>
+      <li>
+        <span class="font-display text-3xl block mb-3" style="color: var(--ember);">03</span>
+        <h3 class="font-display text-xl mb-2" style="color: var(--ink);">Evening overstimulation</h3>
+        <p style="color: var(--ink-soft); line-height: 1.6;">Suddenly alert right when you're trying to wind down for the night.</p>
+      </li>
+    </ul>
+  </section>
+
+  <hr class="divider max-w-6xl mx-auto" />
+
+  <!-- ============ WHAT'S INSIDE ============ -->
+  <section id="inside" class="max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-24 reveal" aria-labelledby="inside-heading">
+    <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-start">
+      <div>
+        <p class="eyebrow mb-3">What's inside</p>
+        <h2 id="inside-heading" class="text-3xl md:text-4xl mb-6" style="color: var(--ink);">Your energy has a shape. This is how you get it back.</h2>
+        <p style="color: var(--ink-soft); line-height: 1.7;">Adaptogenic and calming herbs, explained by when and how to use them — not just what they are.</p>
+      </div>
+      <ul class="space-y-5 list-none p-0 m-0">
+        <li class="pb-5 flex gap-4" style="border-bottom: 1px solid var(--line);">
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--ember);">·</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;">Named protocols for restoring a healthy morning-to-evening cortisol rhythm</span>
+        </li>
+        <li class="pb-5 flex gap-4" style="border-bottom: 1px solid var(--line);">
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--ember);">·</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;">Guidance matched to your specific pattern — wired-tired, afternoon crash, or evening spike</span>
+        </li>
+        <li class="pb-5 flex gap-4" style="border-bottom: 1px solid var(--line);">
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--ember);">·</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;">Adaptogenic and calming herbs, explained by timing, not just by name</span>
+        </li>
+        <li class="flex gap-4">
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--ember);">·</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;">Practices designed to fit into a real schedule, not an idealized one</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <hr class="divider max-w-6xl mx-auto" />
+
+  <!-- ============ WHO IT'S FOR + REVIEWS ============ -->
+  <section class="max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-24 reveal">
+    <div class="grid md:grid-cols-2 gap-12">
+      <div class="noise-panel p-8 rounded-2xl" style="border: 1px solid var(--line);">
+        <p class="eyebrow mb-3">Who it's for</p>
+        <p class="font-display text-2xl mb-4" style="color: var(--ink); line-height: 1.4;">Anyone running on stress hormones instead of rest, who wants their energy back where it belongs.</p>
+        <p style="color: var(--muted);">Your energy has a shape. This is how you get it back.</p>
+      </div>
+      <div class="p-8 rounded-2xl" style="border: 1px solid var(--line); background: var(--bg-panel);">
+        <p class="eyebrow mb-3">Readers</p>
+        <div class="flex items-center gap-2 mb-2" style="color: var(--ember); font-size: 1.1rem;" aria-hidden="true">☆☆☆☆☆</div>
+        <p class="text-lg" style="color: var(--ink);">
+          <span data-gumroad-field="rating"></span>
+          <span data-gumroad-field="review-count">Be the first to review</span>
+        </p>
+        <p class="text-sm mt-3" style="color: var(--muted);">Reviews appear here once readers leave them on Gumroad.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FINAL CTA ============ -->
+  <section id="buy" class="relative overflow-hidden py-20 md:py-28">
+    <div class="absolute inset-0 -z-10" aria-hidden="true" style="background: radial-gradient(90% 120% at 50% 110%, color-mix(in srgb, var(--ember) 18%, transparent), transparent 60%), var(--bg-panel);"></div>
+    <div class="max-w-3xl mx-auto px-5 md:px-8 text-center">
+      <p class="eyebrow mb-4">Herbal Circle · Stress &amp; Adrenal Health</p>
+      <h2 class="text-3xl md:text-5xl mb-6" style="color: var(--ink);">Get your curve back into shape</h2>
+      <p class="text-lg mb-9" style="color: var(--ink-soft);">Named protocols for whichever pattern you're living with — wired-tired, the afternoon crash, or the evening spike.</p>
+      <a href="#" data-gumroad-action="buy" class="btn-buy text-lg" aria-label="Buy The Cortisol Curve">
+        Get the Book — <span data-gumroad-field="price">$9</span>
+      </a>
+      <p class="text-xs mt-6" style="color: var(--muted);">Educational content only, not a substitute for medical advice. Consult a healthcare provider for diagnosed adrenal or endocrine conditions.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="max-w-6xl mx-auto px-5 md:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-4" style="border-top: 1px solid var(--line);">
+  <span class="font-display text-lg" style="color: var(--ink);">Herbal Circle</span>
+  <p class="text-xs text-center sm:text-right" style="color: var(--muted); max-width: 32rem;">Educational content only, not a substitute for medical advice. Consult a healthcare provider for diagnosed adrenal or endocrine conditions.</p>
+</footer>
+
+<div id="sticky-bar" class="md:hidden">
+  <div class="flex items-center justify-between gap-4 px-4 py-3">
+    <div>
+      <p class="text-xs" style="color: var(--muted);">The Cortisol Curve</p>
+      <p class="font-display text-lg" style="color: var(--ink);" data-gumroad-field="price">$9</p>
+    </div>
+    <a href="#" data-gumroad-action="buy" class="btn-buy" aria-label="Buy The Cortisol Curve">Get it</a>
+  </div>
+</div>
+
+<script>
+  (function () {
+    "use strict";
+    var root = document.documentElement;
+    var toggle = document.getElementById('theme-toggle');
+
+    function currentIsLight() {
+      var explicit = root.getAttribute('data-theme');
+      if (explicit) return explicit === 'light';
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+    }
+    function applyToggleLabel() {
+      var light = currentIsLight();
+      toggle.setAttribute('aria-pressed', String(light));
+      toggle.setAttribute('aria-label', light ? 'Switch to dark mode' : 'Switch to light mode');
+    }
+    applyToggleLabel();
+    toggle.addEventListener('click', function () {
+      var next = currentIsLight() ? 'dark' : 'light';
+      root.setAttribute('data-theme', next);
+      applyToggleLabel();
+      try { window.localStorage.setItem('hc-theme', next); } catch (e) {}
+    });
+    try {
+      var saved = window.localStorage.getItem('hc-theme');
+      if (saved === 'light' || saved === 'dark') { root.setAttribute('data-theme', saved); applyToggleLabel(); }
+    } catch (e) {}
+
+    // ---------- Cortisol curve toggle ----------
+    var tabHealthy = document.getElementById('tab-healthy');
+    var tabDisrupted = document.getElementById('tab-disrupted');
+    var pathHealthy = document.getElementById('path-healthy');
+    var pathDisrupted = document.getElementById('path-disrupted');
+    var dotsHealthy = document.getElementById('dots-healthy');
+    var dotsDisrupted = document.getElementById('dots-disrupted');
+    var capHealthy = document.getElementById('caption-healthy');
+    var capDisrupted = document.getElementById('caption-disrupted');
+
+    function showHealthy() {
+      pathHealthy.style.opacity = '1'; dotsHealthy.style.opacity = '1';
+      pathDisrupted.style.opacity = '0'; dotsDisrupted.style.opacity = '0';
+      capHealthy.classList.remove('hidden'); capDisrupted.classList.add('hidden');
+      tabHealthy.setAttribute('aria-pressed', 'true'); tabDisrupted.setAttribute('aria-pressed', 'false');
+    }
+    function showDisrupted() {
+      pathHealthy.style.opacity = '0'; dotsHealthy.style.opacity = '0';
+      pathDisrupted.style.opacity = '1'; dotsDisrupted.style.opacity = '1';
+      capHealthy.classList.add('hidden'); capDisrupted.classList.remove('hidden');
+      tabHealthy.setAttribute('aria-pressed', 'false'); tabDisrupted.setAttribute('aria-pressed', 'true');
+    }
+    tabHealthy.addEventListener('click', showHealthy);
+    tabDisrupted.addEventListener('click', showDisrupted);
+
+    var revealEls = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); }
+        });
+      }, { threshold: 0.12 });
+      revealEls.forEach(function (el) { io.observe(el); });
+    } else {
+      revealEls.forEach(function (el) { el.classList.add('in-view'); });
+    }
+
+    var stickyBar = document.getElementById('sticky-bar');
+    var hero = document.getElementById('hero');
+    if ('IntersectionObserver' in window && stickyBar && hero) {
+      var heroObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) { stickyBar.classList.remove('show'); }
+          else { stickyBar.classList.add('show'); }
+        });
+      }, { threshold: 0 });
+      heroObserver.observe(hero);
+    }
+  })();
+</script>
+
+</body>
+  </html>    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color .35s ease, color .35s ease;
+    margin: 0;
+  }
+  h1, h2, h3, .font-display {
+    font-family: 'Cormorant Garamond', Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: 0.01em;
+  }
+  .eyebrow {
+    font-family: 'Inter', system-ui, sans-serif; font-size: 0.72rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--ember); font-weight: 600;
+  }
+  ::selection { background: var(--ember); color: var(--bg); }
+  a, button { font-family: inherit; }
+  :focus-visible { outline: 2.5px solid var(--focus); outline-offset: 3px; border-radius: 3px; }
+  .skip-link {
+    position: absolute; left: -9999px; top: 0; z-index: 100;
+    background: var(--gold); color: var(--bg); padding: 10px 16px; border-radius: 0 0 6px 0; font-weight: 600;
+  }
+  .skip-link:focus { left: 0; }
+  .divider { height: 1px; background: var(--line); border: 0; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+  .btn-buy {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    background: var(--gold); color: var(--bg); font-weight: 700; letter-spacing: 0.01em;
+    padding: 0.95rem 1.9rem; border-radius: 999px; border: none; cursor: pointer;
+    box-shadow: 0 10px 30px -12px var(--shadow);
+    transition: transform .18s ease, box-shadow .18s ease, background-color .2s ease;
+    text-decoration: none; font-size: 1rem;
+  }
+  .btn-buy:hover { transform: translateY(-2px); background: var(--gold-strong); }
+  .btn-buy:active { transform: translateY(0); }
+  .btn-ghost {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    background: transparent; color: var(--ink); border: 1px solid var(--line);
+    padding: 0.9rem 1.6rem; border-radius: 999px; font-weight: 600; cursor: pointer;
+    transition: border-color .2s ease, background-color .2s ease;
+  }
+  .btn-ghost:hover { border-color: var(--ember); background: color-mix(in srgb, var(--ember) 12%, transparent); }
+
+  .theme-toggle {
+    width: 42px; height: 42px; border-radius: 999px; border: 1px solid var(--line);
+    background: var(--bg-panel); color: var(--ink);
+    display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .theme-toggle svg { width: 18px; height: 18px; }
+  html[data-theme="light"] .icon-moon,
+  html:not([data-theme="dark"]):not([data-theme="light"]) .icon-moon { display: none; }
+  html[data-theme="dark"] .icon-sun,
+  html:not([data-theme="dark"]):not([data-theme="light"]) .icon-sun { display: none; }
+  @media (prefers-color-scheme: light) {
+    html:not([data-theme]) .icon-moon { display: none; }
+    html:not([data-theme]) .icon-sun { display: inline; }
+  }
+
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in-view { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+  .drift { animation: drift 15s ease-in-out infinite; }
+  .drift-rev { animation: driftRev 18s ease-in-out infinite; }
+  @keyframes drift { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-12px) rotate(2deg); } }
+  @keyframes driftRev { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(10px) rotate(-2deg); } }
+  @media (prefers-reduced-motion: reduce) { .drift, .drift-rev { animation: none; } }
+
+  /* Cortisol curve chart */
+  .curve-tab {
+    padding: 0.55rem 1.1rem; border-radius: 999px; border: 1px solid var(--line);
+    background: transparent; color: var(--muted); font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    transition: color .2s ease, border-color .2s ease, background-color .2s ease;
+  }
+  .curve-tab[aria-pressed="true"] { color: var(--bg); background: var(--ember); border-color: var(--ember); }
+  .curve-path { transition: opacity .4s ease; }
+  .curve-path-healthy { stroke: var(--gold); }
+  .curve-path-disrupted { stroke: var(--ember); }
+  .curve-dot { transition: opacity .4s ease; }
+
+  .noise-panel {
+    background: radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--ember) 14%, transparent), transparent 40%), var(--bg-panel);
+  }
+
+  #sticky-bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    background: var(--bg-panel); border-top: 1px solid var(--line);
+    box-shadow: 0 -10px 30px -16px var(--shadow);
+    transform: translateY(110%); transition: transform .3s ease;
+  }
+  #sticky-bar.show { transform: translateY(0); }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="sticky top-0 z-30" style="background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);">
+  <div class="max-w-6xl mx-auto px-5 md:px-8 h-16 flex items-center justify-between">
+    <span class="font-display text-lg" style="color: var(--ink);">Herbal Circle</span>
+    <div class="flex items-center gap-3">
+      <a href="#curve" class="hidden sm:inline text-sm" style="color: var(--muted); text-decoration:none;">The curve</a>
+      <a href="#inside" class="hidden sm:inline text-sm" style="color: var(--muted); text-decoration:none;">What's inside</a>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to light mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.3A8.3 8.3 0 1 1 9.7 4a6.6 6.6 0 0 0 10.3 10.3Z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section id="hero" class="relative overflow-hidden">
+    <div class="absolute inset-0 -z-10" aria-hidden="true" style="background: radial-gradient(120% 90% at 50% -10%, color-mix(in srgb, var(--ember) 16%, transparent), transparent 55%);"></div>
+    <svg aria-hidden="true" class="drift absolute -top-6 -left-8 w-40 opacity-20" viewBox="0 0 100 140" fill="none" stroke="var(--ember)" stroke-width="1.2">
+      <path d="M50 130C50 100 20 90 20 60C20 35 50 15 50 5"/>
+    </svg>
+    <svg aria-hidden="true" class="drift-rev absolute top-10 -right-10 w-48 opacity-15" viewBox="0 0 100 140" fill="none" stroke="var(--gold)" stroke-width="1.2">
+      <ellipse cx="50" cy="70" rx="14" ry="34" transform="rotate(18 50 70)"/>
+    </svg>
+
+    <div class="max-w-6xl mx-auto px-5 md:px-8 pt-14 md:pt-20 pb-16 md:pb-24">
+      <div class="max-w-2xl">
+        <p class="eyebrow mb-4">Herbal Circle · Stress &amp; Adrenal Health</p>
+        <h1 class="text-4xl sm:text-5xl md:text-6xl leading-[1.05] mb-6" style="color: var(--ink);" data-gumroad-field="name">
+          The Cortisol Curve
+        </h1>
+        <p class="text-lg md:text-xl mb-8" style="color: var(--ink-soft); line-height: 1.6;">
+          Wired at midnight, exhausted at noon — that's a cortisol curve that's lost its shape. Named protocols for bringing your stress hormone back to its natural rhythm, instead of just being told to "relax more."
+        </p>
+        <div class="flex flex-wrap items-center gap-4 mb-6">
+          <a href="#buy" data-gumroad-action="buy" class="btn-buy" aria-label="Buy The Cortisol Curve">
+            Get the Book
+            <span style="font-weight:700;" data-gumroad-field="price">$9</span>
+          </a>
+          <a href="#curve" class="btn-ghost" style="text-decoration:none;">See your curve ↓</a>
+        </div>
+        <div class="flex items-center gap-2 text-sm" style="color: var(--muted);">
+          <span aria-hidden="true" style="color: var(--ember);">☆☆☆☆☆</span>
+          <span data-gumroad-field="rating"></span>
+          <span data-gumroad-field="review-count">Be the first to review</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider max-w-6xl mx-auto" />
+
+  <!-- ============ THE CURVE (signature interactive element) ============ -->
+  <section id="curve" class="max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-24 reveal" aria-labelledby="curve-heading">
+    <div class="max-w-2xl mb-8">
+      <p class="eyebrow mb-3">Two shapes, one hormone</p>
+      <h2 id="curve-heading" class="text-3xl md:text-4xl mb-4" style="color: var(--ink);">What does your cortisol curve look like right now?</h2>
+      <p style="color: var(--ink-soft); line-height: 1.7;">Cortisol is meant to be high in the morning and taper off by night. Tap below to compare that shape with the pattern most people actually live with.</p>
+    </div>
+
+    <div class="flex gap-3 mb-6" role="group" aria-label="Choose a cortisol pattern to view">
+      <button type="button" id="tab-healthy" class="curve-tab" aria-pressed="true">Balanced Rhythm</button>
+      <button type="button" id="tab-disrupted" class="curve-tab" aria-pressed="false">Wired &amp; Tired</button>
+    </div>
+
+    <div class="rounded-2xl p-5 md:p-8 drop-shadow-card" style="background: var(--bg-panel); border: 1px solid var(--line); box-shadow: 0 18px 40px -20px var(--shadow);">
       <svg viewBox="0 0 600 220" class="w-full h-auto" role="img" aria-describedby="curve-caption">
         <line x1="40" y1="190" x2="580" y2="190" stroke="var(--line)" stroke-width="1"/>
         <path class="curve-path curve-path-healthy" id="path-healthy" d="M60,40 C160,55 200,90 300,110 C400,130 460,150 540,160" fill="none" stroke-width="3" stroke-linecap="round"/>
