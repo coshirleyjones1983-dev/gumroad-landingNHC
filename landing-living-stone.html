@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --bg: #1B2415; --bg-panel: #232E1B; --bg-panel-2: #29341F;
+    --ink: #F1ECDF; --ink-soft: #D9D2BE; --muted: #B7C0A6;
+    --gold: #D4AF37; --gold-strong: #E9C766; --ember: #E0793D;
+    --line: rgba(212, 175, 55, 0.28); --shadow: rgba(0, 0, 0, 0.45); --focus: #E9C766;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme]) {
+      --bg: #F6F1E3; --bg-panel: #FFFFFF; --bg-panel-2: #FBF7EA;
+      --ink: #22301A; --ink-soft: #37432B; --muted: #5B6B4C;
+      --gold: #8A6A14; --gold-strong: #6E5410; --ember: #9C4E17;
+      --line: rgba(90, 70, 15, 0.22); --shadow: rgba(60, 50, 20, 0.12); --focus: #6E5410;
+    }
+  }
+  html[data-theme="light"] {
+    --bg: #F6F1E3; --bg-panel: #FFFFFF; --bg-panel-2: #FBF7EA;
+    --ink: #22301A; --ink-soft: #37432B; --muted: #5B6B4C;
+    --gold: #8A6A14; --gold-strong: #6E5410; --ember: #9C4E17;
+    --line: rgba(90, 70, 15, 0.22); --shadow: rgba(60, 50, 20, 0.12); --focus: #6E5410;
+  }
+  html[data-theme="dark"] {
+    --bg: #1B2415; --bg-panel: #232E1B; --bg-panel-2: #29341F;
+    --ink: #F1ECDF; --ink-soft: #D9D2BE; --muted: #B7C0A6;
+    --gold: #D4AF37; --gold-strong: #E9C766; --ember: #E0793D;
+    --line: rgba(212, 175, 55, 0.28); --shadow: rgba(0, 0, 0, 0.45); --focus: #E9C766;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color .35s ease, color .35s ease;
+    margin: 0;
+  }
+  h1, h2, h3, .font-display {
+    font-family: 'Cormorant Garamond', Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    letter-spacing: 0.01em;
+  }
+  .eyebrow {
+    font-family: 'Inter', system-ui, sans-serif; font-size: 0.72rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--ember); font-weight: 600;
+  }
+  ::selection { background: var(--ember); color: var(--bg); }
+  a, button { font-family: inherit; }
+  :focus-visible { outline: 2.5px solid var(--focus); outline-offset: 3px; border-radius: 3px; }
+  .skip-link {
+    position: absolute; left: -9999px; top: 0; z-index: 100;
+    background: var(--gold); color: var(--bg); padding: 10px 16px; border-radius: 0 0 6px 0; font-weight: 600;
+  }
+  .skip-link:focus { left: 0; }
+  .divider { height: 1px; background: var(--line); border: 0; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+  .btn-buy {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    background: var(--gold); color: var(--bg); font-weight: 700; letter-spacing: 0.01em;
+    padding: 0.95rem 1.9rem; border-radius: 999px; border: none; cursor: pointer;
+    box-shadow: 0 10px 30px -12px var(--shadow);
+    transition: transform .18s ease, box-shadow .18s ease, background-color .2s ease;
+    text-decoration: none; font-size: 1rem;
+  }
+  .btn-buy:hover { transform: translateY(-2px); background: var(--gold-strong); }
+  .btn-buy:active { transform: translateY(0); }
+  .btn-ghost {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    background: transparent; color: var(--ink); border: 1px solid var(--line);
+    padding: 0.9rem 1.6rem; border-radius: 999px; font-weight: 600; cursor: pointer;
+    transition: border-color .2s ease, background-color .2s ease;
+  }
+  .btn-ghost:hover { border-color: var(--ember); background: color-mix(in srgb, var(--ember) 12%, transparent); }
+
+  .theme-toggle {
+    width: 42px; height: 42px; border-radius: 999px; border: 1px solid var(--line);
+    background: var(--bg-panel); color: var(--ink);
+    display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .theme-toggle svg { width: 18px; height: 18px; }
+  html[data-theme="light"] .icon-moon,
+  html:not([data-theme="dark"]):not([data-theme="light"]) .icon-moon { display: none; }
+  html[data-theme="dark"] .icon-sun,
+  html:not([data-theme="dark"]):not([data-theme="light"]) .icon-sun { display: none; }
+  @media (prefers-color-scheme: light) {
+    html:not([data-theme]) .icon-moon { display: none; }
+    html:not([data-theme]) .icon-sun { display: inline; }
+  }
+
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in-view { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+  .drift { animation: drift 15s ease-in-out infinite; }
+  .drift-rev { animation: driftRev 18s ease-in-out infinite; }
+  @keyframes drift { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-12px) rotate(2deg); } }
+  @keyframes driftRev { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(10px) rotate(-2deg); } }
+  @media (prefers-reduced-motion: reduce) { .drift, .drift-rev { animation: none; } }
+
+  /* Bone density chart */
+  .curve-tab {
+    padding: 0.55rem 1.1rem; border-radius: 999px; border: 1px solid var(--line);
+    background: transparent; color: var(--muted); font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    transition: color .2s ease, border-color .2s ease, background-color .2s ease;
+  }
+  .curve-tab[aria-pressed="true"] { color: var(--bg); background: var(--ember); border-color: var(--ember); }
+  .curve-path { transition: opacity .4s ease; }
+  .curve-path-supported { stroke: var(--gold); }
+  .curve-path-unsupported { stroke: var(--ember); }
+  .curve-dot { transition: opacity .4s ease; }
+
+  .noise-panel {
+    background: radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--ember) 14%, transparent), transparent 40%), var(--bg-panel);
+  }
+
+  .factor-card, .door-card {
+    background: var(--bg-panel); border: 1px solid var(--line); border-radius: 1rem; padding: 1.6rem;
+  }
+  .factor-card.is-bonus { border-color: var(--gold); background: var(--bg-panel-2); }
+
+  .risk-list { display: grid; gap: 0.9rem; }
+  @media (min-width: 768px) { .risk-list { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+  .risk-item { display: flex; gap: 0.75rem; align-items: flex-start; }
+  .risk-check { flex: none; width: 1.35rem; height: 1.35rem; border-radius: 999px; border: 1px solid var(--gold); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; margin-top: 0.1rem; }
+
+  .stat-strip {
+    display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1.25rem;
+  }
+  @media (min-width: 768px) { .stat-strip { grid-template-columns: repeat(4, minmax(0,1fr)); } }
+
+  #sticky-bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    background: var(--bg-panel); border-top: 1px solid var(--line);
+    box-shadow: 0 -10px 30px -16px var(--shadow);
+    transform: translateY(110%); transition: transform .3s ease;
+  }
+  #sticky-bar.show { transform: translateY(0); }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="sticky top-0 z-30" style="background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);">
+  <div class="max-w-6xl mx-auto px-5 md:px-8 h-16 flex items-center justify-between">
+    <span class="font-display text-lg" style="color: var(--ink);">Herbal Circle</span>
+    <div class="flex items-center gap-3">
+      <a href="#curve" class="hidden sm:inline text-sm" style="color: var(--muted); text-decoration:none;">The remodeling curve</a>
+      <a href="#inside" class="hidden sm:inline text-sm" style="color: var(--muted); text-decoration:none;">What's inside</a>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to light mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.3A8.3 8.3 0 1 1 9.7 4a6.6 6.6 0 0 0 10.3 10.3Z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section id="hero" class="relative overflow-hidden">
+    <div class="absolute inset-0 -z-10" aria-hidden="true" style="background: radial-gradient(120% 90% at 50% -10%, color-mix(in srgb, var(--ember) 16%, transparent), transparent 55%);"></div>
+    <svg aria-hidden="true" class="drift absolute -top-6 -left-8 w-40 opacity-20" viewBox="0 0 100 140" fill="none" stroke="var(--ember)" stroke-width="1.2">
+      <path d="M50 130C50 100 20 90 20 60C20 35 50 15 50 5"/>
+    </svg>
+    <svg aria-hidden="true" class="drift-rev absolute top-10 -right-10 w-48 opacity-15" viewBox="0 0 100 140" fill="none" stroke="var(--gold)" stroke-width="1.2">
+      <ellipse cx="50" cy="70" rx="14" ry="34" transform="rotate(18 50 70)"/>
+    </svg>
+
+    <div class="max-w-6xl mx-auto px-5 md:px-8 pt-14 md:pt-20 pb-10 md:pb-16">
+      <div class="max-w-2xl">
+        <p class="eyebrow mb-4">Herbal Circle · Signature Volume</p>
+        <h1 class="text-4xl sm:text-5xl md:text-6xl leading-[1.05] mb-6" style="color: var(--ink);" data-gumroad-field="name">
+          The Living Stone
+        </h1>
+        <p class="text-lg md:text-xl mb-8" style="color: var(--ink-soft); line-height: 1.6;">
+          Bone isn't scaffolding that finishes building in your twenties and just holds still. It's a living tissue — roughly 5–10% of your skeleton is being rebuilt at any given moment, from childhood through your final years. That's not decline. That's maintenance, and maintenance can be supported at nearly any age.
+        </p>
+        <div class="flex flex-wrap items-center gap-4 mb-6">
+          <a href="#buy" data-gumroad-action="buy" class="btn-buy" aria-label="Buy The Living Stone">
+            Get the Book
+            <span style="font-weight:700;" data-gumroad-field="price">$19</span>
+          </a>
+          <a href="#curve" class="btn-ghost" style="text-decoration:none;">See how bone rebuilds ↓</a>
+        </div>
+        <div class="flex items-center gap-2 text-sm" style="color: var(--muted);">
+          <span aria-hidden="true" style="color: var(--ember);">☆☆☆☆☆</span>
+          <span data-gumroad-field="rating"></span>
+          <span data-gumroad-field="review-count">Be the first to review</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-5 md:px-8 pb-14 md:pb-20">
+      <div class="stat-strip rounded-2xl p-6 md:p-8" style="background: var(--bg-panel); border: 1px solid var(--line);">
+        <div class="text-center">
+          <p class="font-display text-3xl md:text-4xl" style="color: var(--gold-strong);">6</p>
+          <p class="text-xs mt-1" style="color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase;">Named Protocols</p>
+        </div>
+        <div class="text-center">
+          <p class="font-display text-3xl md:text-4xl" style="color: var(--gold-strong);">1</p>
+          <p class="text-xs mt-1" style="color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase;">Remodeling System</p>
+        </div>
+        <div class="text-center">
+          <p class="font-display text-3xl md:text-4xl" style="color: var(--gold-strong);">9</p>
+          <p class="text-xs mt-1" style="color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase;">Core Herbs &amp; Nutrients</p>
+        </div>
+        <div class="text-center">
+          <p class="font-display text-3xl md:text-4xl" style="color: var(--gold-strong);">12</p>
+          <p class="text-xs mt-1" style="color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase;">Month Sequence</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider max-w-6xl mx-auto" />
+
+  <!-- ============ THE CURVE (signature interactive element) ============ -->
+  <section id="curve" class="max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-24 reveal" aria-labelledby="curve-heading">
+    <div class="max-w-2xl mb-8">
+      <p class="eyebrow mb-3">The window that matters most</p>
+      <h2 id="curve-heading" class="text-3xl md:text-4xl mb-4" style="color: var(--ink);">What does bone density actually do through menopause?</h2>
+      <p style="color: var(--ink-soft); line-height: 1.7;">Estrogen acts as a brake on bone breakdown. When that brake releases at menopause, the years that follow decide far more than the decades before or after. Tap below to compare a supported trajectory with the pattern most people never see coming.</p>
+    </div>
+
+    <div class="flex gap-3 mb-6" role="group" aria-label="Choose a bone density trajectory to view">
+      <button type="button" id="tab-supported" class="curve-tab" aria-pressed="true">Supported</button>
+      <button type="button" id="tab-unsupported" class="curve-tab" aria-pressed="false">Unsupported</button>
+    </div>
+
+    <div class="rounded-2xl p-5 md:p-8 drop-shadow-card" style="background: var(--bg-panel); border: 1px solid var(--line); box-shadow: 0 18px 40px -20px var(--shadow);">
+      <svg viewBox="0 0 600 200" class="w-full h-auto" role="img" aria-describedby="curve-caption">
+        <line x1="40" y1="70" x2="580" y2="70" stroke="var(--line)" stroke-width="1" stroke-dasharray="4 4"/>
+        <path class="curve-path curve-path-supported" id="path-supported" d="M60,70 C160,72 220,75 300,78 C380,82 460,86 540,90" fill="none" stroke-width="3" stroke-linecap="round"/>
+        <path class="curve-path curve-path-unsupported" id="path-unsupported" d="M60,70 C140,75 200,120 300,150 C380,165 460,170 540,175" fill="none" stroke-width="3" stroke-linecap="round" style="opacity:0"/>
+        <g id="dots-supported" class="curve-dot">
+          <circle cx="60" cy="70" r="4" fill="var(--gold)"/>
+          <circle cx="300" cy="78" r="4" fill="var(--gold)"/>
+          <circle cx="540" cy="90" r="4" fill="var(--gold)"/>
+        </g>
+        <g id="dots-unsupported" class="curve-dot" style="opacity:0">
+          <circle cx="60" cy="70" r="4" fill="var(--ember)"/>
+          <circle cx="300" cy="150" r="4" fill="var(--ember)"/>
+          <circle cx="540" cy="175" r="4" fill="var(--ember)"/>
+        </g>
+      </svg>
+      <div class="flex justify-between mt-2 text-xs" style="color: var(--muted);" aria-hidden="true">
+        <span>Age 45</span>
+        <span>Age 55</span>
+        <span>Age 70</span>
+      </div>
+      <p id="curve-caption" class="text-sm mt-4" style="color: var(--ink-soft); line-height: 1.6;" aria-live="polite">
+        <span id="caption-supported">The target trajectory: with hormonal support, mechanical loading, and mineral sufficiency in place, bone density holds far closer to steady through the years it's most at risk.</span>
+        <span id="caption-unsupported" class="hidden">The pattern this book addresses: a sharp, often invisible decline in the years around menopause, when estrogen's natural brake on bone breakdown releases.</span>
+      </p>
+    </div>
+  </section>
+
+  <hr class="divider max-w-6xl mx-auto" />
+
+  <!-- ============ THE BALANCE BONE DEPENDS ON ============ -->
+  <section class="max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-24 reveal" aria-labelledby="factors-heading">
+    <p class="eyebrow mb-3">One balance, five levers</p>
+    <h2 id="factors-heading" class="text-3xl md:text-4xl mb-10 max-w-xl" style="color: var(--ink);">The balance bone depends on</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="factor-card">
+        <span class="font-display text-3xl block mb-3" style="color: var(--ember);">01</span>
+        <h3 class="font-display text-xl mb-2" style="color: var(--ink);">Hormonal Signaling</h3>
+        <p style="color: var(--ink-soft); line-height: 1.6;">Estrogen acts as a brake on bone breakdown — the single largest reason loss accelerates sharply around menopause, when that brake releases.</p>
+      </div>
+      <div class="factor-card">
+        <span class="font-display text-3xl block mb-3" style="color: var(--ember);">02</span>
+        <h3 class="font-display text-xl mb-2" style="color: var(--ink);">Mechanical Loading</h3>
+        <p style="color: var(--ink-soft); line-height: 1.6;">Bone remodels in direct response to physical stress — regularly loaded bone grows denser; unloaded bone loses density regardless of diet.</p>
+      </div>
+      <div class="factor-card">
+        <span class="font-display text-3xl block mb-3" style="color: var(--ember);">03</span>
+        <h3 class="font-display text-xl mb-2" style="color: var(--ink);">The Collagen Matrix</h3>
+        <p style="color: var(--ink-soft); line-height: 1.6;">Bone is a flexible collagen scaffold that mineral crystals attach to — good mineral density on a poor scaffold can still fracture easily.</p>
+      </div>
+      <div class="factor-card">
+        <span class="font-display text-3xl block mb-3" style="color: var(--ember);">04</span>
+        <h3 class="font-display text-xl mb-2" style="color: var(--ink);">Inflammation &amp; Cortisol</h3>
+        <p style="color: var(--ink-soft); line-height: 1.6;">Chronic inflammation and elevated cortisol both independently activate the cells that break bone down — stress is a bone-loss driver in its own right.</p>
+      </div>
+      <div class="factor-card">
+        <span class="font-display text-3xl block mb-3" style="color: var(--ember);">05</span>
+        <h3 class="font-display text-xl mb-2" style="color: var(--ink);">Nutrient Sufficiency</h3>
+        <p style="color: var(--ink-soft); line-height: 1.6;">Calcium, magnesium, vitamin D, and K2 each play a distinct role — a deficiency in any one limits what the others can do.</p>
+      </div>
+      <div class="factor-card is-bonus">
+        <span class="font-display text-3xl block mb-3" style="color: var(--gold-strong);">+</span>
+        <h3 class="font-display text-xl mb-2" style="color: var(--ink);">Knowing, Not Guessing</h3>
+        <p style="color: var(--ink-soft); line-height: 1.6;">A sixth, often-skipped piece: actually measuring whether the first five are working, rather than hoping.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider max-w-6xl mx-auto" />
+
+  <!-- ============ WHO SHOULD PAY CLOSEST ATTENTION ============ -->
+  <section class="max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-24 reveal" aria-labelledby="risk-heading">
+    <p class="eyebrow mb-3">This applies to more people than you'd think</p>
+    <h2 id="risk-heading" class="text-3xl md:text-4xl mb-6 max-w-2xl" style="color: var(--ink);">Who should pay closest attention</h2>
+    <p class="mb-8 max-w-2xl" style="color: var(--ink-soft); line-height: 1.7;">Bone density work benefits everyone, but it's especially urgent for a few groups most bone-health content quietly leaves out.</p>
+    <div class="risk-list mb-8">
+      <div class="risk-item">
+        <span class="risk-check" aria-hidden="true">✓</span>
+        <p style="color: var(--ink-soft); line-height: 1.5;">Postmenopausal, especially the first 5–10 years after menopause</p>
+      </div>
+      <div class="risk-item">
+        <span class="risk-check" aria-hidden="true">✓</span>
+        <p style="color: var(--ink-soft); line-height: 1.5;">Early or surgically induced menopause, before age 45</p>
+      </div>
+      <div class="risk-item">
+        <span class="risk-check" aria-hidden="true">✓</span>
+        <p style="color: var(--ink-soft); line-height: 1.5;">Men over 70, a group frequently under-screened</p>
+      </div>
+      <div class="risk-item">
+        <span class="risk-check" aria-hidden="true">✓</span>
+        <p style="color: var(--ink-soft); line-height: 1.5;">Family history of osteoporosis or hip fracture</p>
+      </div>
+      <div class="risk-item">
+        <span class="risk-check" aria-hidden="true">✓</span>
+        <p style="color: var(--ink-soft); line-height: 1.5;">Long-term corticosteroid use</p>
+      </div>
+      <div class="risk-item">
+        <span class="risk-check" aria-hidden="true">✓</span>
+        <p style="color: var(--ink-soft); line-height: 1.5;">History of disordered eating or prolonged low body weight</p>
+      </div>
+      <div class="risk-item">
+        <span class="risk-check" aria-hidden="true">✓</span>
+        <p style="color: var(--ink-soft); line-height: 1.5;">Smokers and those with regular high alcohol intake</p>
+      </div>
+      <div class="risk-item">
+        <span class="risk-check" aria-hidden="true">✓</span>
+        <p style="color: var(--ink-soft); line-height: 1.5;">Malabsorption conditions — celiac disease, IBD, or bariatric surgery history</p>
+      </div>
+      <div class="risk-item">
+        <span class="risk-check" aria-hidden="true">✓</span>
+        <p style="color: var(--ink-soft); line-height: 1.5;">Sedentary individuals of any age</p>
+      </div>
+    </div>
+    <div class="rounded-2xl p-6" style="background: var(--bg-panel-2); border: 1px solid var(--gold);">
+      <p style="color: var(--ink-soft); line-height: 1.6;">If two or more of these apply to you, the testing protocol in this book isn't optional reading — it's the most important section for you specifically.</p>
+    </div>
+  </section>
+
+  <hr class="divider max-w-6xl mx-auto" />
+
+  <!-- ============ WHAT'S INSIDE ============ -->
+  <section id="inside" class="max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-24 reveal" aria-labelledby="inside-heading">
+    <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-start">
+      <div>
+        <p class="eyebrow mb-3">What's inside</p>
+        <h2 id="inside-heading" class="text-3xl md:text-4xl mb-6" style="color: var(--ink);">Six protocols. One year. All measurable.</h2>
+        <p style="color: var(--ink-soft); line-height: 1.7; margin-bottom: 1.25rem;">This volume is built around a year, not a 90-day sprint — bone remodels too slowly for anything shorter. Each protocol layers in deliberately, and testing isn't an afterthought: it's how you know the other five are actually working.</p>
+        <p style="color: var(--ink-soft); line-height: 1.7;">Nine core herbs and nutrients — including calcium, vitamin K2, and collagen peptides — form the foundation, each explained by dose and mechanism, not just by name.</p>
+      </div>
+      <ol class="space-y-5 list-none p-0 m-0">
+        <li class="pb-5 flex gap-4" style="border-bottom: 1px solid var(--line);">
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--ember);">01</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;"><strong style="color: var(--ink);">The Coral Foundation Method</strong> — foundational mineral sufficiency</span>
+        </li>
+        <li class="pb-5 flex gap-4" style="border-bottom: 1px solid var(--line);">
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--ember);">02</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;"><strong style="color: var(--ink);">The Ember Root Hormone Rite</strong> — menopause-accelerated bone loss</span>
+        </li>
+        <li class="pb-5 flex gap-4" style="border-bottom: 1px solid var(--line);">
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--ember);">03</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;"><strong style="color: var(--ink);">The Woven Scaffold Collagen Method</strong> — the collagen matrix</span>
+        </li>
+        <li class="pb-5 flex gap-4" style="border-bottom: 1px solid var(--line);">
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--ember);">04</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;"><strong style="color: var(--ink);">The Standing Ground Loading Rite</strong> — mechanical bone-building signal</span>
+        </li>
+        <li class="pb-5 flex gap-4" style="border-bottom: 1px solid var(--line);">
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--ember);">05</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;"><strong style="color: var(--ink);">The Quiet Ember Inflammation Rite</strong> — cortisol- and inflammation-driven breakdown</span>
+        </li>
+        <li class="flex gap-4">
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--ember);">06</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;"><strong style="color: var(--ink);">The Witness Stone Vigilance Rite</strong> — testing and tracking</span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <hr class="divider max-w-6xl mx-auto" />
+
+  <!-- ============ WHO IT'S FOR + REVIEWS ============ -->
+  <section class="max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-24 reveal">
+    <div class="grid md:grid-cols-2 gap-12">
+      <div class="noise-panel p-8 rounded-2xl" style="border: 1px solid var(--line);">
+        <p class="eyebrow mb-3">Who it's for</p>
+        <p class="font-display text-2xl mb-4" style="color: var(--ink); line-height: 1.4;">Anyone ready to treat bone as living tissue instead of a fixed structure — especially in the first decade after menopause, with a family history of fracture, or overdue for a scan.</p>
+        <p style="color: var(--muted);">Build for a decade you haven't reached yet.</p>
+      </div>
+      <div class="p-8 rounded-2xl" style="border: 1px solid var(--line); background: var(--bg-panel);">
+        <p class="eyebrow mb-3">Readers</p>
+        <div class="flex items-center gap-2 mb-2" style="color: var(--ember); font-size: 1.1rem;" aria-hidden="true">☆☆☆☆☆</div>
+        <p class="text-lg" style="color: var(--ink);">
+          <span data-gumroad-field="rating"></span>
+          <span data-gumroad-field="review-count">Be the first to review</span>
+        </p>
+        <p class="text-sm mt-3" style="color: var(--muted);">Reviews appear here once readers leave them on Gumroad.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FINAL CTA ============ -->
+  <section id="buy" class="relative overflow-hidden py-20 md:py-28">
+    <div class="absolute inset-0 -z-10" aria-hidden="true" style="background: radial-gradient(90% 120% at 50% 110%, color-mix(in srgb, var(--ember) 18%, transparent), transparent 60%), var(--bg-panel);"></div>
+    <div class="max-w-3xl mx-auto px-5 md:px-8 text-center">
+      <p class="eyebrow mb-4">Herbal Circle · Signature Volume</p>
+      <h2 class="text-3xl md:text-5xl mb-6" style="color: var(--ink);">Build for a decade you haven't reached yet</h2>
+      <p class="text-lg mb-9" style="color: var(--ink-soft);">Six named protocols, nine core herbs and nutrients, and a year-long sequence for treating bone as the living tissue it actually is.</p>
+      <a href="#" data-gumroad-action="buy" class="btn-buy text-lg" aria-label="Buy The Living Stone">
+        Get the Book — <span data-gumroad-field="price">$19</span>
+      </a>
+      <p class="text-xs mt-6 max-w-xl mx-auto" style="color: var(--muted); line-height: 1.6;">Educational content only, not a substitute for medical advice. Not a substitute for bone density testing (DEXA scan), diagnosis, or treatment of osteoporosis or osteopenia by a qualified healthcare professional. If already diagnosed with osteoporosis, osteopenia, or a fracture-risk condition, or taking bisphosphonates or other bone-specific medication, discuss every protocol here with your physician first.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="max-w-6xl mx-auto px-5 md:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-4" style="border-top: 1px solid var(--line);">
+  <span class="font-display text-lg" style="color: var(--ink);">Herbal Circle</span>
+  <p class="text-xs text-center sm:text-right" style="color: var(--muted); max-width: 32rem;">Educational content only, not a substitute for medical advice, DEXA testing, or treatment by a qualified healthcare professional.</p>
+</footer>
+
+<div id="sticky-bar" class="md:hidden">
+  <div class="flex items-center justify-between gap-4 px-4 py-3">
+    <div>
+      <p class="text-xs" style="color: var(--muted);">The Living Stone</p>
+      <p class="font-display text-lg" style="color: var(--ink);" data-gumroad-field="price">$19</p>
+    </div>
+    <a href="#" data-gumroad-action="buy" class="btn-buy" aria-label="Buy The Living Stone">Get it</a>
+  </div>
+</div>
+
+<script>
+  (function () {
+    "use strict";
+    var root = document.documentElement;
+    var toggle = document.getElementById('theme-toggle');
+
+    function currentIsLight() {
+      var explicit = root.getAttribute('data-theme');
+      if (explicit) return explicit === 'light';
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+    }
+    function applyToggleLabel() {
+      var light = currentIsLight();
+      toggle.setAttribute('aria-pressed', String(light));
+      toggle.setAttribute('aria-label', light ? 'Switch to dark mode' : 'Switch to light mode');
+    }
+    applyToggleLabel();
+    toggle.addEventListener('click', function () {
+      var next = currentIsLight() ? 'dark' : 'light';
+      root.setAttribute('data-theme', next);
+      applyToggleLabel();
+      try { window.localStorage.setItem('hc-theme', next); } catch (e) {}
+    });
+    try {
+      var saved = window.localStorage.getItem('hc-theme');
+      if (saved === 'light' || saved === 'dark') { root.setAttribute('data-theme', saved); applyToggleLabel(); }
+    } catch (e) {}
+
+    // ---------- Bone density curve toggle ----------
+    var tabSupported = document.getElementById('tab-supported');
+    var tabUnsupported = document.getElementById('tab-unsupported');
+    var pathSupported = document.getElementById('path-supported');
+    var pathUnsupported = document.getElementById('path-unsupported');
+    var dotsSupported = document.getElementById('dots-supported');
+    var dotsUnsupported = document.getElementById('dots-unsupported');
+    var capSupported = document.getElementById('caption-supported');
+    var capUnsupported = document.getElementById('caption-unsupported');
+
+    function showSupported() {
+      pathSupported.style.opacity = '1'; dotsSupported.style.opacity = '1';
+      pathUnsupported.style.opacity = '0'; dotsUnsupported.style.opacity = '0';
+      capSupported.classList.remove('hidden'); capUnsupported.classList.add('hidden');
+      tabSupported.setAttribute('aria-pressed', 'true'); tabUnsupported.setAttribute('aria-pressed', 'false');
+    }
+    function showUnsupported() {
+      pathSupported.style.opacity = '0'; dotsSupported.style.opacity = '0';
+      pathUnsupported.style.opacity = '1'; dotsUnsupported.style.opacity = '1';
+      capSupported.classList.add('hidden'); capUnsupported.classList.remove('hidden');
+      tabSupported.setAttribute('aria-pressed', 'false'); tabUnsupported.setAttribute('aria-pressed', 'true');
+    }
+    tabSupported.addEventListener('click', showSupported);
+    tabUnsupported.addEventListener('click', showUnsupported);
+
+    var revealEls = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); }
+        });
+      }, { threshold: 0.12 });
+      revealEls.forEach(function (el) { io.observe(el); });
+    } else {
+      revealEls.forEach(function (el) { el.classList.add('in-view'); });
+    }
+
+    var stickyBar = document.getElementById('sticky-bar');
+    var hero = document.getElementById('hero');
+    if ('IntersectionObserver' in window && stickyBar && hero) {
+      var heroObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) { stickyBar.classList.remove('show'); }
+          else { stickyBar.classList.add('show'); }
+        });
+      }, { threshold: 0 });
+      heroObserver.observe(hero);
+    }
+  })();
+</script>
+
+</body>
+</html>
