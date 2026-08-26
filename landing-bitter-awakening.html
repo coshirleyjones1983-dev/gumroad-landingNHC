@@ -101,7 +101,7 @@
   @keyframes driftRev { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(10px) rotate(-2deg); } }
   @media (prefers-reduced-motion: reduce) { .drift, .drift-rev { animation: none; } }
 
-  /* Digestive response chart */
+  /* Glucose response chart */
   .curve-tab {
     padding: 0.55rem 1.1rem; border-radius: 999px; border: 1px solid var(--line);
     background: transparent; color: var(--muted); font-size: 0.85rem; font-weight: 600; cursor: pointer;
@@ -109,13 +109,22 @@
   }
   .curve-tab[aria-pressed="true"] { color: var(--bg); background: var(--ember); border-color: var(--ember); }
   .curve-path { transition: opacity .4s ease; }
-  .curve-path-with { stroke: var(--gold); }
-  .curve-path-without { stroke: var(--ember); }
+  .curve-path-anchored { stroke: var(--gold); }
+  .curve-path-spike { stroke: var(--ember); }
   .curve-dot { transition: opacity .4s ease; }
 
   .noise-panel {
     background: radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--ember) 14%, transparent), transparent 40%), var(--bg-panel);
   }
+
+  .door-card {
+    background: var(--bg-panel); border: 1px solid var(--line); border-radius: 1rem; padding: 1.75rem;
+  }
+
+  .stat-strip {
+    display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1.25rem;
+  }
+  @media (min-width: 768px) { .stat-strip { grid-template-columns: repeat(4, minmax(0,1fr)); } }
 
   #sticky-bar {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
@@ -133,7 +142,7 @@
   <div class="max-w-6xl mx-auto px-5 md:px-8 h-16 flex items-center justify-between">
     <span class="font-display text-lg" style="color: var(--ink);">Herbal Circle</span>
     <div class="flex items-center gap-3">
-      <a href="#curve" class="hidden sm:inline text-sm" style="color: var(--muted); text-decoration:none;">See it in action</a>
+      <a href="#curve" class="hidden sm:inline text-sm" style="color: var(--muted); text-decoration:none;">The glucose curve</a>
       <a href="#inside" class="hidden sm:inline text-sm" style="color: var(--muted); text-decoration:none;">What's inside</a>
       <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to light mode">
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/></svg>
@@ -155,26 +164,48 @@
       <ellipse cx="50" cy="70" rx="14" ry="34" transform="rotate(18 50 70)"/>
     </svg>
 
-    <div class="max-w-6xl mx-auto px-5 md:px-8 pt-14 md:pt-20 pb-16 md:pb-24">
+    <div class="max-w-6xl mx-auto px-5 md:px-8 pt-14 md:pt-20 pb-10 md:pb-16">
       <div class="max-w-2xl">
-        <p class="eyebrow mb-4">Herbal Circle · Digestion &amp; Metabolism</p>
-        <h1 class="text-4xl sm:text-5xl md:text-6xl leading-[1.05] mb-6" style="color: var(--ink);" data-gumroad-field="name">
+        <p class="eyebrow mb-4">Herbal Circle · Signature Volume</p>
+        <h1 class="text-4xl sm:text-5xl md:text-6xl leading-[1.05] mb-3" style="color: var(--ink);" data-gumroad-field="name">
           The Bitter Awakening
         </h1>
+        <p class="text-sm mb-6" style="color: var(--muted);">By Colleen S. Jones · A Complete Herbal System for Metabolic Reset</p>
         <p class="text-lg md:text-xl mb-8" style="color: var(--ink-soft); line-height: 1.6;">
-          Heavy after every meal, hungry for nothing in particular, foggy by 3pm — that's not just "getting older," that's a digestive fire that's gone quiet. Named protocols for waking it back up, one bitter herb at a time.
+          Blood sugar spikes, a fullness signal that never quite arrives, cravings, stubborn midsection weight, and the muscle you lose along the way — these aren't five separate problems. They're one system falling out of rhythm. We didn't need the injection. We removed the bitter.
         </p>
         <div class="flex flex-wrap items-center gap-4 mb-6">
           <a href="#buy" data-gumroad-action="buy" class="btn-buy" aria-label="Buy The Bitter Awakening">
             Get the Book
             <span style="font-weight:700;" data-gumroad-field="price">$9</span>
           </a>
-          <a href="#curve" class="btn-ghost" style="text-decoration:none;">See it in action ↓</a>
+          <a href="#curve" class="btn-ghost" style="text-decoration:none;">See the mechanism ↓</a>
         </div>
         <div class="flex items-center gap-2 text-sm" style="color: var(--muted);">
           <span aria-hidden="true" style="color: var(--ember);">☆☆☆☆☆</span>
           <span data-gumroad-field="rating"></span>
           <span data-gumroad-field="review-count">Be the first to review</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-5 md:px-8 pb-14 md:pb-20">
+      <div class="stat-strip rounded-2xl p-6 md:p-8" style="background: var(--bg-panel); border: 1px solid var(--line);">
+        <div class="text-center">
+          <p class="font-display text-3xl md:text-4xl" style="color: var(--gold-strong);">5</p>
+          <p class="text-xs mt-1" style="color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase;">Named Protocols</p>
+        </div>
+        <div class="text-center">
+          <p class="font-display text-3xl md:text-4xl" style="color: var(--gold-strong);">1</p>
+          <p class="text-xs mt-1" style="color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase;">Metabolic System</p>
+        </div>
+        <div class="text-center">
+          <p class="font-display text-3xl md:text-4xl" style="color: var(--gold-strong);">7</p>
+          <p class="text-xs mt-1" style="color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase;">Core Herbs</p>
+        </div>
+        <div class="text-center">
+          <p class="font-display text-3xl md:text-4xl" style="color: var(--gold-strong);">90</p>
+          <p class="text-xs mt-1" style="color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase;">Day Sequence</p>
         </div>
       </div>
     </div>
@@ -185,67 +216,72 @@
   <!-- ============ THE CURVE (signature interactive element) ============ -->
   <section id="curve" class="max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-24 reveal" aria-labelledby="curve-heading">
     <div class="max-w-2xl mb-8">
-      <p class="eyebrow mb-3">One taste, two outcomes</p>
-      <h2 id="curve-heading" class="text-3xl md:text-4xl mb-4" style="color: var(--ink);">What does your body actually do after a meal?</h2>
-      <p style="color: var(--ink-soft); line-height: 1.7;">A bitter taste before eating tells your gut to get ready — digestive juices flow, bile moves, and you stay light. Tap below to compare that response with what happens when it never gets the signal.</p>
+      <p class="eyebrow mb-3">The highest-leverage door</p>
+      <h2 id="curve-heading" class="text-3xl md:text-4xl mb-4" style="color: var(--ink);">What does your blood sugar actually do after a meal?</h2>
+      <p style="color: var(--ink-soft); line-height: 1.7;">The sixty to ninety minutes after a carbohydrate-containing meal decide most of what comes after — including the familiar afternoon crash. Tap below to compare a flattened response with the pattern most people live with.</p>
     </div>
 
-    <div class="flex gap-3 mb-6" role="group" aria-label="Choose a digestive pattern to view">
-      <button type="button" id="tab-with" class="curve-tab" aria-pressed="true">With Bitters</button>
-      <button type="button" id="tab-without" class="curve-tab" aria-pressed="false">Without Bitters</button>
+    <div class="flex gap-3 mb-6" role="group" aria-label="Choose a post-meal glucose pattern to view">
+      <button type="button" id="tab-anchored" class="curve-tab" aria-pressed="true">Anchored Response</button>
+      <button type="button" id="tab-spike" class="curve-tab" aria-pressed="false">Typical Spike</button>
     </div>
 
     <div class="rounded-2xl p-5 md:p-8 drop-shadow-card" style="background: var(--bg-panel); border: 1px solid var(--line); box-shadow: 0 18px 40px -20px var(--shadow);">
       <svg viewBox="0 0 600 200" class="w-full h-auto" role="img" aria-describedby="curve-caption">
-        <line x1="40" y1="190" x2="580" y2="190" stroke="var(--line)" stroke-width="1"/>
-        <path class="curve-path curve-path-with" id="path-with" d="M60,60 C160,65 200,68 300,72 C400,75 460,78 540,80" fill="none" stroke-width="3" stroke-linecap="round"/>
-        <path class="curve-path curve-path-without" id="path-without" d="M60,90 C160,120 220,145 300,150 C380,152 420,148 540,145" fill="none" stroke-width="3" stroke-linecap="round" style="opacity:0"/>
-        <g id="dots-with" class="curve-dot">
-          <circle cx="60" cy="60" r="4" fill="var(--gold)"/>
-          <circle cx="300" cy="72" r="4" fill="var(--gold)"/>
-          <circle cx="540" cy="80" r="4" fill="var(--gold)"/>
+        <line x1="40" y1="110" x2="580" y2="110" stroke="var(--line)" stroke-width="1" stroke-dasharray="4 4"/>
+        <path class="curve-path curve-path-anchored" id="path-anchored" d="M60,110 C160,100 220,95 300,95 C380,95 460,100 540,105" fill="none" stroke-width="3" stroke-linecap="round"/>
+        <path class="curve-path curve-path-spike" id="path-spike" d="M60,110 C140,90 200,45 300,50 C380,90 430,140 540,155" fill="none" stroke-width="3" stroke-linecap="round" style="opacity:0"/>
+        <g id="dots-anchored" class="curve-dot">
+          <circle cx="60" cy="110" r="4" fill="var(--gold)"/>
+          <circle cx="300" cy="95" r="4" fill="var(--gold)"/>
+          <circle cx="540" cy="105" r="4" fill="var(--gold)"/>
         </g>
-        <g id="dots-without" class="curve-dot" style="opacity:0">
-          <circle cx="60" cy="90" r="4" fill="var(--ember)"/>
-          <circle cx="300" cy="150" r="4" fill="var(--ember)"/>
-          <circle cx="540" cy="145" r="4" fill="var(--ember)"/>
+        <g id="dots-spike" class="curve-dot" style="opacity:0">
+          <circle cx="60" cy="110" r="4" fill="var(--ember)"/>
+          <circle cx="300" cy="50" r="4" fill="var(--ember)"/>
+          <circle cx="540" cy="155" r="4" fill="var(--ember)"/>
         </g>
       </svg>
       <div class="flex justify-between mt-2 text-xs" style="color: var(--muted);" aria-hidden="true">
-        <span>At the table</span>
-        <span>30 min after</span>
-        <span>2 hrs after</span>
+        <span>At the meal</span>
+        <span>90 min after</span>
+        <span>3 hrs after</span>
       </div>
       <p id="curve-caption" class="text-sm mt-4" style="color: var(--ink-soft); line-height: 1.6;" aria-live="polite">
-        <span id="caption-with">The target response: bitters trigger digestive secretions before the first bite, so you stay light and steady through the meal and well after.</span>
-        <span id="caption-without" class="hidden">The pattern this book addresses: comfortable at the table, heavy within thirty minutes, and still foggy two hours later.</span>
+        <span id="caption-anchored">The target response: blood sugar rises gently after eating and eases back down smoothly, with no crash to chase behind it.</span>
+        <span id="caption-spike" class="hidden">The pattern this book opens with: a hard spike in the ninety minutes after eating, followed by a drop below baseline — the mechanism behind the familiar 3pm crash.</span>
       </p>
     </div>
   </section>
 
   <hr class="divider max-w-6xl mx-auto" />
 
-  <!-- ============ THE THREE PATTERNS ============ -->
-  <section class="max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-24 reveal" aria-labelledby="patterns-heading">
-    <p class="eyebrow mb-3">Named protocols for each pattern</p>
-    <h2 id="patterns-heading" class="text-3xl md:text-4xl mb-10 max-w-xl" style="color: var(--ink);">Three signs your digestive fire has gone quiet</h2>
-    <ul class="grid md:grid-cols-3 gap-8 list-none p-0 m-0">
-      <li>
-        <span class="font-display text-3xl block mb-3" style="color: var(--ember);">01</span>
-        <h3 class="font-display text-xl mb-2" style="color: var(--ink);">Heavy before you're done eating</h3>
-        <p style="color: var(--ink-soft); line-height: 1.6;">That overstuffed, need-a-nap feeling that shows up halfway through a normal-sized meal.</p>
-      </li>
-      <li>
-        <span class="font-display text-3xl block mb-3" style="color: var(--ember);">02</span>
-        <h3 class="font-display text-xl mb-2" style="color: var(--ink);">Eating on the clock, not on hunger</h3>
-        <p style="color: var(--ink-soft); line-height: 1.6;">You eat because it's noon, not because anything in your body actually asked for food.</p>
-      </li>
-      <li>
-        <span class="font-display text-3xl block mb-3" style="color: var(--ember);">03</span>
-        <h3 class="font-display text-xl mb-2" style="color: var(--ink);">The afternoon fog</h3>
-        <p style="color: var(--ink-soft); line-height: 1.6;">Bloating and a hard-to-shake heaviness that hits like clockwork after lunch.</p>
-      </li>
-    </ul>
+  <!-- ============ ONE CASCADE, FOUR DOORS ============ -->
+  <section class="max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-24 reveal" aria-labelledby="doors-heading">
+    <p class="eyebrow mb-3">One cascade, four doors</p>
+    <h2 id="doors-heading" class="text-3xl md:text-4xl mb-10 max-w-xl" style="color: var(--ink);">Five symptoms. One system falling out of rhythm.</h2>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="door-card">
+        <span class="font-display text-3xl block mb-3" style="color: var(--ember);">I</span>
+        <h3 class="font-display text-xl mb-2" style="color: var(--ink);">Insulin resistance takes the wheel</h3>
+        <p style="color: var(--ink-soft); line-height: 1.6;">Cells stop responding efficiently to insulin, glucose lingers in the blood, and the pancreas overcompensates — itself a signal to store fat, independent of what's actually being eaten.</p>
+      </div>
+      <div class="door-card">
+        <span class="font-display text-3xl block mb-3" style="color: var(--ember);">II</span>
+        <h3 class="font-display text-xl mb-2" style="color: var(--ink);">The gut's own fullness signal goes quiet</h3>
+        <p style="color: var(--ink-soft); line-height: 1.6;">The body's natural satiety hormone is released in response to bitter and fibrous foods specifically — a diet built on sweet, salty, and umami gives that pathway almost nothing to respond to.</p>
+      </div>
+      <div class="door-card">
+        <span class="font-display text-3xl block mb-3" style="color: var(--ember);">III</span>
+        <h3 class="font-display text-xl mb-2" style="color: var(--ink);">The hunger hormone overcorrects</h3>
+        <p style="color: var(--ink-soft); line-height: 1.6;">Poor sleep and irregular eating push its baseline higher, especially in the evening — driving cravings for exactly the foods an already-struggling system handles worst.</p>
+      </div>
+      <div class="door-card">
+        <span class="font-display text-3xl block mb-3" style="color: var(--ember);">IV</span>
+        <h3 class="font-display text-xl mb-2" style="color: var(--ink);">Cortisol rewrites where fuel goes</h3>
+        <p style="color: var(--ink-soft); line-height: 1.6;">Chronic stress hormone elevation directs fat to the midsection and breaks down muscle for fuel — lowering metabolic rate and making every other door harder to close.</p>
+      </div>
+    </div>
   </section>
 
   <hr class="divider max-w-6xl mx-auto" />
@@ -255,27 +291,32 @@
     <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-start">
       <div>
         <p class="eyebrow mb-3">What's inside</p>
-        <h2 id="inside-heading" class="text-3xl md:text-4xl mb-6" style="color: var(--ink);">Your appetite has a rhythm. This is how you wake it back up.</h2>
-        <p style="color: var(--ink-soft); line-height: 1.7;">Bitter herbs, explained by when and how to take them — not just what they are.</p>
+        <h2 id="inside-heading" class="text-3xl md:text-4xl mb-6" style="color: var(--ink);">Five protocols. One system. Ninety days.</h2>
+        <p style="color: var(--ink-soft); line-height: 1.7; margin-bottom: 1.25rem;">Attempting all five doors at once is the most common reason a "complete reset" fails by week three. This book sequences them deliberately, so each protocol works better because the one before it is already open.</p>
+        <p style="color: var(--ink-soft); line-height: 1.7;">Seven core herbs — including berberine, gentian root, and ashwagandha — form the backbone of every protocol, each explained by mechanism, dose, and timing, not just by name.</p>
       </div>
-      <ul class="space-y-5 list-none p-0 m-0">
+      <ol class="space-y-5 list-none p-0 m-0">
         <li class="pb-5 flex gap-4" style="border-bottom: 1px solid var(--line);">
-          <span aria-hidden="true" class="font-display text-xl" style="color: var(--ember);">·</span>
-          <span style="color: var(--ink-soft); line-height: 1.6;">Named protocols for reactivating bitter taste receptors before meals</span>
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--ember);">I</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;"><strong style="color: var(--ink);">The Amber Hour Glucose Anchor Method</strong> — for post-meal blood sugar spikes</span>
         </li>
         <li class="pb-5 flex gap-4" style="border-bottom: 1px solid var(--line);">
-          <span aria-hidden="true" class="font-display text-xl" style="color: var(--ember);">·</span>
-          <span style="color: var(--ink-soft); line-height: 1.6;">A herb-by-herb guide — gentian, dandelion root, artichoke leaf, orange peel, and more</span>
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--ember);">II</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;"><strong style="color: var(--ink);">The Bitter Root Satiety Rite</strong> — for blunted fullness signals</span>
         </li>
         <li class="pb-5 flex gap-4" style="border-bottom: 1px solid var(--line);">
-          <span aria-hidden="true" class="font-display text-xl" style="color: var(--ember);">·</span>
-          <span style="color: var(--ink-soft); line-height: 1.6;">Guidance matched to your specific pattern — heaviness, low appetite, or the afternoon fog</span>
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--ember);">III</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;"><strong style="color: var(--ink);">The Dusk Hunger Quieting Reset</strong> — for cravings and hunger-hormone dysregulation</span>
+        </li>
+        <li class="pb-5 flex gap-4" style="border-bottom: 1px solid var(--line);">
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--ember);">IV</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;"><strong style="color: var(--ink);">The Iron Root Muscle Preservation Rite</strong> — for protecting lean muscle through metabolic change</span>
         </li>
         <li class="flex gap-4">
-          <span aria-hidden="true" class="font-display text-xl" style="color: var(--ember);">·</span>
-          <span style="color: var(--ink-soft); line-height: 1.6;">Practices built around real mealtimes, not an idealized schedule</span>
+          <span aria-hidden="true" class="font-display text-xl" style="color: var(--ember);">V</span>
+          <span style="color: var(--ink-soft); line-height: 1.6;"><strong style="color: var(--ink);">The Ember Core Fat Release Method</strong> — for cortisol-driven visceral fat</span>
         </li>
-      </ul>
+      </ol>
     </div>
   </section>
 
@@ -286,8 +327,8 @@
     <div class="grid md:grid-cols-2 gap-12">
       <div class="noise-panel p-8 rounded-2xl" style="border: 1px solid var(--line);">
         <p class="eyebrow mb-3">Who it's for</p>
-        <p class="font-display text-2xl mb-4" style="color: var(--ink); line-height: 1.4;">Anyone who used to look forward to meals and now just gets through them, who wants their appetite and energy back.</p>
-        <p style="color: var(--muted);">Your appetite has a rhythm. This is how you wake it back up.</p>
+        <p class="font-display text-2xl mb-4" style="color: var(--ink); line-height: 1.4;">Anyone whose blood sugar, appetite, cravings, midsection weight, and energy feel like five different problems, who's ready to treat them as one.</p>
+        <p style="color: var(--muted);">This is a system you restore, not a number you chase.</p>
       </div>
       <div class="p-8 rounded-2xl" style="border: 1px solid var(--line); background: var(--bg-panel);">
         <p class="eyebrow mb-3">Readers</p>
@@ -305,13 +346,13 @@
   <section id="buy" class="relative overflow-hidden py-20 md:py-28">
     <div class="absolute inset-0 -z-10" aria-hidden="true" style="background: radial-gradient(90% 120% at 50% 110%, color-mix(in srgb, var(--ember) 18%, transparent), transparent 60%), var(--bg-panel);"></div>
     <div class="max-w-3xl mx-auto px-5 md:px-8 text-center">
-      <p class="eyebrow mb-4">Herbal Circle · Digestion &amp; Metabolism</p>
-      <h2 class="text-3xl md:text-5xl mb-6" style="color: var(--ink);">Wake your digestive fire back up</h2>
-      <p class="text-lg mb-9" style="color: var(--ink-soft);">Named protocols for whichever pattern you're living with — heaviness, low appetite, or the afternoon fog.</p>
+      <p class="eyebrow mb-4">Herbal Circle · Signature Volume</p>
+      <h2 class="text-3xl md:text-5xl mb-6" style="color: var(--ink);">Wake the whole system back up</h2>
+      <p class="text-lg mb-9" style="color: var(--ink-soft);">Five named protocols, seven core herbs, and a 90-day sequence for opening each door in the order it actually needs opening.</p>
       <a href="#" data-gumroad-action="buy" class="btn-buy text-lg" aria-label="Buy The Bitter Awakening">
         Get the Book — <span data-gumroad-field="price">$9</span>
       </a>
-      <p class="text-xs mt-6" style="color: var(--muted);">Educational content only, not a substitute for medical advice. Consult a healthcare provider for diagnosed digestive conditions.</p>
+      <p class="text-xs mt-6 max-w-xl mx-auto" style="color: var(--muted); line-height: 1.6;">Educational content only, not a substitute for medical advice. Consult a qualified healthcare professional before beginning any herbal protocol, particularly if you are diabetic, prediabetic, taking a blood-sugar-lowering medication, or currently using a GLP-1 receptor agonist medication.</p>
     </div>
   </section>
 
@@ -319,7 +360,7 @@
 
 <footer class="max-w-6xl mx-auto px-5 md:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-4" style="border-top: 1px solid var(--line);">
   <span class="font-display text-lg" style="color: var(--ink);">Herbal Circle</span>
-  <p class="text-xs text-center sm:text-right" style="color: var(--muted); max-width: 32rem;">Educational content only, not a substitute for medical advice. Consult a healthcare provider for diagnosed digestive conditions.</p>
+  <p class="text-xs text-center sm:text-right" style="color: var(--muted); max-width: 32rem;">Educational content only, not a substitute for medical advice. Consult a qualified healthcare professional before beginning any herbal protocol, particularly if diabetic, prediabetic, or using blood-sugar or GLP-1 medications.</p>
 </footer>
 
 <div id="sticky-bar" class="md:hidden">
@@ -360,30 +401,30 @@
       if (saved === 'light' || saved === 'dark') { root.setAttribute('data-theme', saved); applyToggleLabel(); }
     } catch (e) {}
 
-    // ---------- Digestive response toggle ----------
-    var tabWith = document.getElementById('tab-with');
-    var tabWithout = document.getElementById('tab-without');
-    var pathWith = document.getElementById('path-with');
-    var pathWithout = document.getElementById('path-without');
-    var dotsWith = document.getElementById('dots-with');
-    var dotsWithout = document.getElementById('dots-without');
-    var capWith = document.getElementById('caption-with');
-    var capWithout = document.getElementById('caption-without');
+    // ---------- Glucose curve toggle ----------
+    var tabAnchored = document.getElementById('tab-anchored');
+    var tabSpike = document.getElementById('tab-spike');
+    var pathAnchored = document.getElementById('path-anchored');
+    var pathSpike = document.getElementById('path-spike');
+    var dotsAnchored = document.getElementById('dots-anchored');
+    var dotsSpike = document.getElementById('dots-spike');
+    var capAnchored = document.getElementById('caption-anchored');
+    var capSpike = document.getElementById('caption-spike');
 
-    function showWith() {
-      pathWith.style.opacity = '1'; dotsWith.style.opacity = '1';
-      pathWithout.style.opacity = '0'; dotsWithout.style.opacity = '0';
-      capWith.classList.remove('hidden'); capWithout.classList.add('hidden');
-      tabWith.setAttribute('aria-pressed', 'true'); tabWithout.setAttribute('aria-pressed', 'false');
+    function showAnchored() {
+      pathAnchored.style.opacity = '1'; dotsAnchored.style.opacity = '1';
+      pathSpike.style.opacity = '0'; dotsSpike.style.opacity = '0';
+      capAnchored.classList.remove('hidden'); capSpike.classList.add('hidden');
+      tabAnchored.setAttribute('aria-pressed', 'true'); tabSpike.setAttribute('aria-pressed', 'false');
     }
-    function showWithout() {
-      pathWith.style.opacity = '0'; dotsWith.style.opacity = '0';
-      pathWithout.style.opacity = '1'; dotsWithout.style.opacity = '1';
-      capWith.classList.add('hidden'); capWithout.classList.remove('hidden');
-      tabWith.setAttribute('aria-pressed', 'false'); tabWithout.setAttribute('aria-pressed', 'true');
+    function showSpike() {
+      pathAnchored.style.opacity = '0'; dotsAnchored.style.opacity = '0';
+      pathSpike.style.opacity = '1'; dotsSpike.style.opacity = '1';
+      capAnchored.classList.add('hidden'); capSpike.classList.remove('hidden');
+      tabAnchored.setAttribute('aria-pressed', 'false'); tabSpike.setAttribute('aria-pressed', 'true');
     }
-    tabWith.addEventListener('click', showWith);
-    tabWithout.addEventListener('click', showWithout);
+    tabAnchored.addEventListener('click', showAnchored);
+    tabSpike.addEventListener('click', showSpike);
 
     var revealEls = document.querySelectorAll('.reveal');
     if ('IntersectionObserver' in window) {
