@@ -1,0 +1,42 @@
+name: Publish The Rooted Bloom landing page
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Preview only (nothing saved yet)
+        run: |
+          PAYLOAD=$(jq -Rs '{custom_html: .}' < landing-rooted-bloom.html)
+          curl -sS -X POST "https://api.gumroad.com/v2/products/tiwfvp/preview_custom_html" \
+            -H "Authorization: Bearer ${{ secrets.GUMROAD_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            --data "$PAYLOAD" > preview.json
+
+          echo "warning:"
+          jq -r '.warning // "none"' preview.json
+          echo "sanitization_report:"
+          jq '.sanitization_report' preview.json
+
+          REMOVED=$(jq -r '.sanitization_report.total_removed // 0' preview.json)
+          WARN=$(jq -r '.warning // empty' preview.json)
+          if [ "$REMOVED" != "0" ] || [ -n "$WARN" ]; then
+            echo "::error::Preview found a problem — see the output above. Stopping before publish."
+            exit 1
+          fi
+
+      - name: Publish
+        run: |
+          PAYLOAD=$(jq -Rs '{custom_html: .}' < landing-rooted-bloom.html)
+          curl -sS -X PUT "https://api.gumroad.com/v2/products/tiwfvp" \
+            -H "Authorization: Bearer ${{ secrets.GUMROAD_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            --data "$PAYLOAD" > publish.json
+
+          echo "Live at:"
+          jq -r '.product.landing_url' publish.json
