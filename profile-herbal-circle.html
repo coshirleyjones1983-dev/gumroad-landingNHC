@@ -97,18 +97,8 @@
   @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
 
   .drift { animation: drift 17s ease-in-out infinite; }
-  @keyframes drift { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-10px) rotate(1.5deg); } }
+  @keyframes drift { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-8px) rotate(1deg); } }
   @media (prefers-reduced-motion: reduce) { .drift { animation: none; } }
-
-  .ring-spin { animation: ringspin 60s linear infinite; transform-origin: center; }
-  @keyframes ringspin { to { transform: rotate(360deg); } }
-  @media (prefers-reduced-motion: reduce) { .ring-spin { animation: none; } }
-
-  .card {
-    background: var(--bg-panel); border: 1px solid var(--line); border-radius: 1rem;
-    padding: 1.75rem; transition: transform .18s ease, border-color .18s ease;
-  }
-  .card:hover { transform: translateY(-3px); border-color: var(--sage); }
 
   .noise-panel {
     background: radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--sage) 16%, transparent), transparent 40%), var(--bg-panel);
@@ -121,6 +111,16 @@
   }
   .social-dot:hover { border-color: var(--sage); color: var(--sage); }
   .social-dot svg { width: 17px; height: 17px; }
+
+  .lib-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 1.25rem;
+    padding: 1.15rem 0.25rem; border-bottom: 1px solid var(--line);
+    text-decoration: none; transition: padding-left .18s ease, border-color .18s ease;
+  }
+  .lib-row:hover { padding-left: 0.6rem; border-color: var(--sage); }
+  .lib-row:last-child { border-bottom: none; }
+  .lib-row .lib-arrow { transition: transform .18s ease; }
+  .lib-row:hover .lib-arrow { transform: translateX(4px); }
 
   #follow-form input[type="email"] {
     background: var(--bg-panel-2); border: 1px solid var(--line); color: var(--ink);
@@ -154,24 +154,14 @@
     <div class="absolute inset-0 -z-10" aria-hidden="true" style="background: radial-gradient(120% 90% at 50% -10%, color-mix(in srgb, var(--sage) 16%, transparent), transparent 55%);"></div>
 
     <div class="max-w-5xl mx-auto px-5 md:px-8 pt-16 md:pt-24 pb-16 md:pb-20 text-center">
-      <div class="relative w-28 h-28 mx-auto mb-6">
-        <svg viewBox="0 0 160 160" class="drift w-28 h-28" role="img" aria-label="Concentric rings around a central mark, the Herbal Circle monogram">
-          <g class="ring-spin">
-            <circle cx="80" cy="80" r="70" fill="none" stroke="var(--line)" stroke-width="1.4"/>
-          </g>
-          <circle cx="80" cy="80" r="52" fill="none" stroke="var(--gold)" stroke-width="1.6" style="opacity:0.6"/>
-          <circle cx="80" cy="80" r="34" fill="none" stroke="var(--sage)" stroke-width="1.8"/>
-        </svg>
-        <span aria-hidden="true" class="absolute inset-0 flex items-center justify-center font-display text-3xl" style="color: var(--ink);">HC</span>
-      </div>
+      <img src="https://public-files.gumroad.com/xvd7nw93dncx2ebt2gcq3sphgb3g" alt="Herbal Circle logo" class="drift w-24 h-24 mx-auto mb-6 rounded-full" style="object-fit: cover; border: 1px solid var(--line);" />
       <p class="eyebrow mb-3">Botanical wellness education</p>
       <h1 class="text-4xl sm:text-5xl md:text-6xl leading-[1.05] mb-5" style="color: var(--ink);">Herbal Circle</h1>
       <p class="max-w-xl mx-auto text-lg md:text-xl mb-8" style="color: var(--ink-soft); line-height: 1.6;">
-        Named herbal protocols, plain-language mechanisms, and a membership built for going deeper than a single ebook ever could.
+        Named herbal protocols and plain-language mechanisms — fifteen guides, one topic at a time.
       </p>
       <div class="flex flex-wrap items-center justify-center gap-4 mb-8">
-        <a href="https://herbalcircle.systeme.io/herbal-circle-apothecary" class="btn-buy" aria-label="Join the Herbal Circle Apothecary membership">Join the Apothecary — $22/mo</a>
-        <a href="#library" class="btn-ghost">Browse the library ↓</a>
+        <a href="#library" class="btn-buy">Browse the library ↓</a>
       </div>
       <div class="flex items-center justify-center gap-3">
         <a class="social-dot" href="https://instagram.com/colleensjonesherbalcircle" target="_blank" rel="noopener" aria-label="Herbal Circle on Instagram">
@@ -192,58 +182,120 @@
 
   <hr class="divider max-w-5xl mx-auto" />
 
-  <!-- ============ LIBRARY GRID ============ -->
-  <section id="library" class="max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-24 reveal" aria-labelledby="library-heading">
-    <div class="max-w-2xl mb-12 mx-auto text-center">
+  <!-- ============ LIBRARY DIRECTORY ============ -->
+  <section id="library" class="max-w-3xl mx-auto px-5 md:px-8 py-16 md:py-24 reveal" aria-labelledby="library-heading">
+    <div class="mb-10">
       <p class="eyebrow mb-3">The library</p>
-      <h2 id="library-heading" class="text-3xl md:text-4xl mb-4" style="color: var(--ink);">Named protocols, one topic at a time</h2>
-      <p style="color: var(--ink-soft); line-height: 1.7;">Start wherever your body needs support most — or skip straight to the Apothecary for the whole collection.</p>
+      <h2 id="library-heading" class="text-3xl md:text-4xl mb-4" style="color: var(--ink);">Fifteen guides, one topic at a time</h2>
+      <p style="color: var(--ink-soft); line-height: 1.7;">Start wherever your body needs support most.</p>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-      <a href="https://jonesy822.gumroad.com/l/tiwfvp" class="card block" style="text-decoration:none;">
-        <p class="eyebrow mb-2">Women's formulary</p>
-        <h3 class="font-display text-2xl mb-2" style="color: var(--ink);">The Rooted Bloom</h3>
-        <p class="text-sm mb-4" style="color: var(--ink-soft); line-height: 1.6;">A full herbal formulary built around cycles, hormones, and life stages.</p>
-        <span class="text-sm font-semibold" style="color: var(--sage);">View the guide →</span>
+    <div>
+      <a href="https://jonesy822.gumroad.com/l/yhuwma" class="lib-row">
+        <span>
+          <span class="eyebrow block mb-1">General reference</span>
+          <span class="font-display text-2xl" style="color: var(--ink);">The Natural Healing Compendium</span>
+        </span>
+        <span class="lib-arrow text-2xl" style="color: var(--sage);" aria-hidden="true">→</span>
       </a>
-
-      <a href="https://jonesy822.gumroad.com/l/ngbdsd" class="card block" style="text-decoration:none;">
-        <p class="eyebrow mb-2">Sleep restoration</p>
-        <h3 class="font-display text-2xl mb-2" style="color: var(--ink);">Rest, Restored</h3>
-        <p class="text-sm mb-4" style="color: var(--ink-soft); line-height: 1.6;">The complete system for winding down, staying asleep, and waking rested.</p>
-        <span class="text-sm font-semibold" style="color: var(--sage);">View the guide →</span>
+      <a href="https://jonesy822.gumroad.com/l/srvlcw" class="lib-row">
+        <span>
+          <span class="eyebrow block mb-1">Intimate wellness</span>
+          <span class="font-display text-2xl" style="color: var(--ink);">Herbs for Sexual Health</span>
+        </span>
+        <span class="lib-arrow text-2xl" style="color: var(--sage);" aria-hidden="true">→</span>
       </a>
-
-      <a href="https://jonesy822.gumroad.com/l/qxulya" class="card block" style="text-decoration:none;">
-        <p class="eyebrow mb-2">Full-body protocol set</p>
-        <h3 class="font-display text-2xl mb-2" style="color: var(--ink);">Body Alchemy Bible</h3>
-        <p class="text-sm mb-4" style="color: var(--ink-soft); line-height: 1.6;">Thirteen protocols across Women, Men, and Universal tracks.</p>
-        <span class="text-sm font-semibold" style="color: var(--sage);">View the guide →</span>
+      <a href="https://jonesy822.gumroad.com/l/jvgcya" class="lib-row">
+        <span>
+          <span class="eyebrow block mb-1">DIY &amp; business</span>
+          <span class="font-display text-2xl" style="color: var(--ink);">Herbal Cosmetics Business Starter Kit</span>
+        </span>
+        <span class="lib-arrow text-2xl" style="color: var(--sage);" aria-hidden="true">→</span>
       </a>
-
-      <a href="https://jonesy822.gumroad.com/l/srvlcw" class="card block" style="text-decoration:none;">
-        <p class="eyebrow mb-2">Intimate wellness</p>
-        <h3 class="font-display text-2xl mb-2" style="color: var(--ink);">Herbs for Intimate Vitality</h3>
-        <p class="text-sm mb-4" style="color: var(--ink-soft); line-height: 1.6;">Botanical support written plainly, without the clinical distance.</p>
-        <span class="text-sm font-semibold" style="color: var(--sage);">View the guide →</span>
+      <a href="https://jonesy822.gumroad.com/l/qxulya" class="lib-row">
+        <span>
+          <span class="eyebrow block mb-1">Full-body protocol set</span>
+          <span class="font-display text-2xl" style="color: var(--ink);">The Body Alchemy Bible</span>
+        </span>
+        <span class="lib-arrow text-2xl" style="color: var(--sage);" aria-hidden="true">→</span>
       </a>
-
-      <a href="https://jonesy822.gumroad.com/l/opslq" class="card block" style="text-decoration:none;">
-        <p class="eyebrow mb-2">Endometriosis support</p>
-        <h3 class="font-display text-2xl mb-2" style="color: var(--ink);">The Endometriosis Compendium</h3>
-        <p class="text-sm mb-4" style="color: var(--ink-soft); line-height: 1.6;">Two volumes of protocols for managing symptoms day to day.</p>
-        <span class="text-sm font-semibold" style="color: var(--sage);">View the guide →</span>
+      <a href="https://jonesy822.gumroad.com/l/uqkcyg" class="lib-row">
+        <span>
+          <span class="eyebrow block mb-1">Menopause support</span>
+          <span class="font-display text-2xl" style="color: var(--ink);">The Second Spring</span>
+        </span>
+        <span class="lib-arrow text-2xl" style="color: var(--sage);" aria-hidden="true">→</span>
       </a>
-
-      <a href="https://herbalcircle.systeme.io/herbal-circle-apothecary" class="card block" style="border-color: var(--gold); text-decoration:none;">
-        <p class="eyebrow mb-2">Membership</p>
-        <h3 class="font-display text-2xl mb-2" style="color: var(--ink);">The Apothecary</h3>
-        <p class="text-sm mb-4" style="color: var(--ink-soft); line-height: 1.6;">Every protocol, every guide, one membership — $22/month.</p>
-        <span class="text-sm font-semibold" style="color: var(--gold-strong);">Join now →</span>
+      <a href="https://jonesy822.gumroad.com/l/kpgcq" class="lib-row">
+        <span>
+          <span class="eyebrow block mb-1">Stress &amp; cortisol</span>
+          <span class="font-display text-2xl" style="color: var(--ink);">The Cortisol Curve</span>
+        </span>
+        <span class="lib-arrow text-2xl" style="color: var(--sage);" aria-hidden="true">→</span>
       </a>
-
+      <a href="https://jonesy822.gumroad.com/l/mfstbf" class="lib-row">
+        <span>
+          <span class="eyebrow block mb-1">Digestive bitters</span>
+          <span class="font-display text-2xl" style="color: var(--ink);">The Bitter Awakening</span>
+        </span>
+        <span class="lib-arrow text-2xl" style="color: var(--sage);" aria-hidden="true">→</span>
+      </a>
+      <a href="https://jonesy822.gumroad.com/l/nssty" class="lib-row">
+        <span>
+          <span class="eyebrow block mb-1">Kidney &amp; mineral support</span>
+          <span class="font-display text-2xl" style="color: var(--ink);">The Living Stone</span>
+        </span>
+        <span class="lib-arrow text-2xl" style="color: var(--sage);" aria-hidden="true">→</span>
+      </a>
+      <a href="https://jonesy822.gumroad.com/l/gyukpl" class="lib-row">
+        <span>
+          <span class="eyebrow block mb-1">PCOS support</span>
+          <span class="font-display text-2xl" style="color: var(--ink);">The PCOS Compendium</span>
+        </span>
+        <span class="lib-arrow text-2xl" style="color: var(--sage);" aria-hidden="true">→</span>
+      </a>
+      <a href="https://jonesy822.gumroad.com/l/opslq" class="lib-row">
+        <span>
+          <span class="eyebrow block mb-1">Endometriosis support</span>
+          <span class="font-display text-2xl" style="color: var(--ink);">The Endometriosis Compendium</span>
+        </span>
+        <span class="lib-arrow text-2xl" style="color: var(--sage);" aria-hidden="true">→</span>
+      </a>
+      <a href="https://jonesy822.gumroad.com/l/brzkks" class="lib-row">
+        <span>
+          <span class="eyebrow block mb-1">Endometriosis support, Vol. II</span>
+          <span class="font-display text-2xl" style="color: var(--ink);">The Endometriosis Compendium Volume II</span>
+        </span>
+        <span class="lib-arrow text-2xl" style="color: var(--sage);" aria-hidden="true">→</span>
+      </a>
+      <a href="https://jonesy822.gumroad.com/l/ccwjlp" class="lib-row">
+        <span>
+          <span class="eyebrow block mb-1">Adenomyosis support</span>
+          <span class="font-display text-2xl" style="color: var(--ink);">The Adenomyosis Compendium</span>
+        </span>
+        <span class="lib-arrow text-2xl" style="color: var(--sage);" aria-hidden="true">→</span>
+      </a>
+      <a href="https://jonesy822.gumroad.com/l/ngbdsd" class="lib-row">
+        <span>
+          <span class="eyebrow block mb-1">Sleep restoration</span>
+          <span class="font-display text-2xl" style="color: var(--ink);">Rest, Restored</span>
+        </span>
+        <span class="lib-arrow text-2xl" style="color: var(--sage);" aria-hidden="true">→</span>
+      </a>
+      <a href="https://jonesy822.gumroad.com/l/vwslz" class="lib-row">
+        <span>
+          <span class="eyebrow block mb-1">Adrenal &amp; energy</span>
+          <span class="font-display text-2xl" style="color: var(--ink);">The Sovereign Root</span>
+        </span>
+        <span class="lib-arrow text-2xl" style="color: var(--sage);" aria-hidden="true">→</span>
+      </a>
+      <a href="https://jonesy822.gumroad.com/l/tiwfvp" class="lib-row">
+        <span>
+          <span class="eyebrow block mb-1">Women's formulary</span>
+          <span class="font-display text-2xl" style="color: var(--ink);">The Rooted Bloom</span>
+        </span>
+        <span class="lib-arrow text-2xl" style="color: var(--sage);" aria-hidden="true">→</span>
+      </a>
     </div>
   </section>
 
@@ -315,4 +367,4 @@
 </script>
 
 </body>
-      </html>
+    </html>
