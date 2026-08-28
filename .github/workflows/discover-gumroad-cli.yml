@@ -6,6 +6,7 @@ on:
 jobs:
   discover:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Install the Gumroad CLI
         run: curl -fsSL https://gumroad.com/install-cli.sh | bash
@@ -13,20 +14,10 @@ jobs:
       - name: Print CLI version
         run: gumroad --version
 
-      - name: Print auth help (do not log in yet — just see the options)
-        run: gumroad auth --help
+      - name: Print auth login help
+        run: timeout 20 gumroad auth login --help < /dev/null
+        continue-on-error: true
 
-      - name: Print pages help
-        run: gumroad pages --help
-
-      - name: Print pages preview help
-        run: gumroad pages preview --help
-
-      - name: Print pages push help
-        run: gumroad pages push --help
-
-      - name: Print pages create help
-        run: gumroad pages create --help
-
-      - name: Print pages list help
-        run: gumroad pages list --help
+      - name: Print auth status help
+        run: timeout 20 gumroad auth status --help < /dev/null
+        continue-on-error: true
