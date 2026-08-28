@@ -1,0 +1,32 @@
+name: Discover Gumroad CLI pages commands (read-only)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install the Gumroad CLI
+        run: curl -fsSL https://gumroad.com/install-cli.sh | bash
+
+      - name: Print CLI version
+        run: gumroad --version
+
+      - name: Print auth help (do not log in yet — just see the options)
+        run: gumroad auth --help
+
+      - name: Print pages help
+        run: gumroad pages --help
+
+      - name: Print pages preview help
+        run: gumroad pages preview --help
+
+      - name: Print pages push help
+        run: gumroad pages push --help
+
+      - name: Print pages create help
+        run: gumroad pages create --help
+
+      - name: Print pages list help
+        run: gumroad pages list --help
