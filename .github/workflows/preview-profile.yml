@@ -1,0 +1,31 @@
+name: Preview the Herbal Circle Gumroad profile page (nothing published)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Install the Gumroad CLI
+        run: curl -fsSL https://gumroad.com/install-cli.sh | bash
+
+      - name: Authenticate
+        run: printf '%s\n' "${{ secrets.GUMROAD_TOKEN }}" | gumroad auth login --with-token --non-interactive
+
+      - name: Confirm authentication
+        run: gumroad auth status --non-interactive
+
+      - name: Preview the page (sanitizer dry run)
+        run: |
+          gumroad pages preview ./profile-herbal-circle.html --json --non-interactive > preview.json
+          cat preview.json
+
+      - name: Dry-run the exact push command too
+        run: |
+          gumroad pages push profile ./profile-herbal-circle.html --dry-run --json --non-interactive > push-dry-run.json
+          cat push-dry-run.json
