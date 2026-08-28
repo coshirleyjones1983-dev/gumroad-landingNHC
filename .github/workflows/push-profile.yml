@@ -1,0 +1,26 @@
+name: Push the Herbal Circle Gumroad profile page (goes live)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Install the Gumroad CLI
+        run: curl -fsSL https://gumroad.com/install-cli.sh | bash
+
+      - name: Authenticate
+        run: printf '%s\n' "${{ secrets.GUMROAD_TOKEN }}" | gumroad auth login --with-token --non-interactive
+
+      - name: Push to the profile (this goes live)
+        run: |
+          gumroad pages push profile ./profile-herbal-circle.html --yes --non-interactive --json > push.json
+          cat push.json
+
+      - name: Confirm it's live
+        run: gumroad pages list --json --non-interactive
